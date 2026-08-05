@@ -1,0 +1,160 @@
+/* LUNARA — brand tokens measured from Figma (node 81:2182), layered on top of styles.css.
+   styles.css itself is never edited; these are new --brand-* custom properties. */
+:root{
+  --brand-bg:#1d1d1d;
+  --brand-bg-raised:#232323;
+  --brand-border:rgba(255,255,255,.14); /* measured hairline #2b2b2b on #1d1d1d */
+  --brand-line:#575757; /* measured form input underline */
+  --brand-text-subtle:rgba(255,255,255,.5); /* measured eyebrow color */
+}
+
+body{background:var(--brand-bg);color:var(--text-default-inverse);}
+
+.eyebrow{
+  font-size:var(--fs-badge);
+  font-weight:var(--fw-base);
+  color:var(--brand-text-subtle);
+  letter-spacing:var(--tracking-kr);
+  margin-bottom:var(--space-6);
+}
+
+/* ---------- hero ---------- */
+.hero{padding-top:var(--space-11);text-align:center;}
+.hero__inner{display:flex;flex-direction:column;align-items:center;}
+.hero__image{
+  aspect-ratio:16/9;
+  max-width:920px;
+  border-block:1px solid var(--brand-border);
+}
+.hero__wordmark{
+  margin-top:var(--space-8);
+  font-size:var(--fs-display-lg);
+  font-weight:var(--fw-strong);
+  line-height:var(--lh-display);
+  letter-spacing:var(--display-tracking);
+}
+.hero__caption{
+  margin-top:var(--space-4);
+  font-size:var(--fs-body-2);
+  color:var(--brand-text-subtle);
+}
+
+/* ---------- featured work ---------- */
+.card--work__image{aspect-ratio:4/3;margin-bottom:var(--space-5);}
+.card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-strong);margin-bottom:var(--space-2);}
+.card--work__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
+
+/* ---------- philosophy + quote ---------- */
+.philosophy{background:var(--brand-bg-raised);}
+.philosophy__statement{
+  font-size:var(--fs-h1);
+  font-weight:var(--fw-strong);
+  line-height:var(--lh-h1);
+}
+.quote{
+  border-left:1px solid var(--brand-border);
+  padding-left:var(--space-5);
+}
+.quote__text{font-size:var(--fs-body-2);line-height:var(--lh-body);margin-bottom:var(--space-4);}
+.quote__author{font-size:var(--fs-badge);color:var(--brand-text-subtle);}
+
+/* ---------- history ---------- */
+.history__title{
+  font-size:var(--fs-display-sm);
+  font-weight:var(--fw-strong);
+  line-height:var(--lh-display);
+  margin-bottom:var(--space-6);
+}
+.history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
+.history__placeholder{aspect-ratio:1/1;}
+.history__years{margin-top:var(--space-10);padding-top:var(--space-7);border-top:1px solid var(--brand-border);}
+.history__year{border-left:1px solid var(--brand-border);padding-left:var(--space-5);}
+.history__year-num{font-size:var(--fs-h2);font-weight:var(--fw-strong);margin-bottom:var(--space-4);}
+.history__list li{
+  font-size:var(--fs-body-2);
+  color:var(--brand-text-subtle);
+  padding-block:var(--space-2);
+  border-top:1px solid var(--brand-border);
+}
+.history__list li:last-child{border-bottom:1px solid var(--brand-border);}
+
+/* ---------- portfolio bento ---------- */
+.portfolio__grid{row-gap:var(--space-9);}
+.card--project__image{aspect-ratio:4/3;margin-bottom:var(--space-5);}
+.card--project__title{font-size:var(--fs-body-1);font-weight:var(--fw-strong);margin-bottom:var(--space-2);}
+.card--project__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
+
+/* ---------- contact ---------- */
+.contact__form{padding-block:var(--space-9);}
+.contact__title{
+  font-size:var(--fs-h1);
+  font-weight:var(--fw-strong);
+  line-height:var(--lh-h1);
+  margin-bottom:var(--space-9);
+}
+.contact__row{margin-bottom:var(--space-6);}
+.field{display:flex;flex-direction:column;gap:var(--space-2);}
+.field--full{margin-bottom:var(--space-8);}
+.field__label{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
+.field__input{
+  width:100%;
+  background:transparent;
+  border:none;
+  border-bottom:1px solid var(--brand-line);
+  padding-block:var(--space-3);
+  font-family:inherit;
+  font-size:var(--fs-body-1);
+  color:var(--text-default-inverse);
+}
+.field__input::placeholder{color:var(--brand-text-subtle);}
+.field__textarea{min-height:160px;resize:vertical;}
+select.field__input{appearance:none;}
+
+.btn{
+  display:inline-block;
+  font-size:var(--fs-body-1);
+  font-weight:var(--fw-strong);
+  padding:var(--space-4) var(--space-8);
+  border-radius:var(--radius-0);
+  cursor:pointer;
+}
+.btn--outline{
+  background:transparent;
+  border:1px solid var(--text-default-inverse);
+  color:var(--text-default-inverse);
+}
+
+/* ---------- footer ---------- */
+.footer{border-top:1px solid var(--brand-border);padding-block:var(--space-9);}
+.footer__row{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  gap:var(--space-6);
+  padding-bottom:var(--space-7);
+  border-bottom:1px solid var(--brand-border);
+}
+.footer__label{font-size:var(--fs-badge);color:var(--brand-text-subtle);margin-bottom:var(--space-2);}
+.footer__value{font-size:var(--fs-body-2);}
+.footer__copy{
+  margin-top:var(--space-7);
+  text-align:center;
+  font-size:var(--fs-badge);
+  color:var(--brand-text-subtle);
+}
+
+/* ---------- reveal ---------- */
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+[data-reveal].is-visible{opacity:1;transform:none;}
+
+/* ---------- responsive ---------- */
+@media (max-width:1024px){
+  .featured__grid > *,
+  .portfolio__grid > *{grid-column:1/13 !important;}
+  .philosophy .grid > *,
+  .history .grid > *{grid-column:1/13 !important;}
+  .history__years{grid-template-columns:1fr;}
+  .contact__form{grid-column:1/13 !important;}
+  .contact__row{grid-template-columns:1fr !important;}
+  .contact__row .field{grid-column:1/13 !important;}
+}

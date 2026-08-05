@@ -1,0 +1,271 @@
+<!--
+variant:
+typo=loud
+image=high
+color=dark-mono
+
+image-radius=sharp
+card-radius=sharp
+button-radius=sharp
+
+border=hairline
+button-style=outline
+fw=700/400
+spacing=space-section
+-->
+<!--
+layout: (measured from Figma node 81:2182, 1920 viewport, 120px page margin → 1680 content)
+Hero          → single centered column (~8/12, container--wide), full-bleed dark bg, image inset in column
+Featured      → 4-4-4 (3 project cards, static — no scroll/carousel per brief)
+Philosophy    → 9-3 (measured 8.8/4.3 → rounded), statement + static single quote card, brand-dark bg
+About/History → 8-4 (heading + placeholder), then 4-4-4 (3 static year columns: 2026/2025/2024)
+Portfolio     → row1 3-3-6 / row2 3-3-3-3 (7 project cards, literal Figma bento grid)
+Contact       → centered 6/12 form column, internal 6-6 label pairs
+Footer        → flex row (business/address/phone/instagram), not a 12-col split
+
+Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
+- Top nav bar (Artists/Productions/Contact anchor links) — page navigation, removed entirely
+- Featured-work scroll-progress tick indicator — pagination-dot equivalent, removed
+- Testimonial "01/05" step counter + multi-card slider — carousel pagination, collapsed to one static quote
+-->
+<!DOCTYPE html>
+<html lang="ko" data-scale="editorial">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUNARA — 일상을 다르게 담는 라이프스타일 콘텐츠 스튜디오</title>
+<meta name="description" content="LUNARA는 브랜드와 공간의 가장 자연스러운 순간을 기록하는 라이프스타일 콘텐츠 스튜디오입니다.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+
+<main>
+
+  <!-- Hero -->
+  <section class="section hero" data-reveal>
+    <div class="container container--wide hero__inner">
+      <p class="eyebrow">Lifestyle Content Studio</p>
+      <div class="img hero__image" aria-hidden="true"></div>
+      <h1 class="hero__wordmark">LUNARA</h1>
+      <p class="hero__caption">일상의 감각을 기록하는 라이프스타일 콘텐츠 스튜디오</p>
+    </div>
+  </section>
+
+  <!-- Featured work — 4-4-4 -->
+  <section class="section featured" data-reveal>
+    <div class="container container--wide">
+      <p class="eyebrow">Featured</p>
+      <div class="grid featured__grid">
+        <article class="card card--work" style="grid-column:1/5">
+          <div class="img card--work__image"></div>
+          <p class="card--work__title">모닝 루틴 다큐멘터리</p>
+          <p class="card--work__meta">필름 · 브랜디드 콘텐츠<br>Client. Aesop Korea</p>
+        </article>
+        <article class="card card--work" style="grid-column:5/9">
+          <div class="img card--work__image"></div>
+          <p class="card--work__title">리빙 브랜드 캠페인</p>
+          <p class="card--work__meta">캠페인 · 공간 화보<br>Client. Fritz Coffee</p>
+        </article>
+        <article class="card card--work" style="grid-column:9/13">
+          <div class="img card--work__image"></div>
+          <p class="card--work__title">웰니스 저널 시리즈</p>
+          <p class="card--work__meta">시리즈 · 에디토리얼<br>Client. Class101</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Philosophy + static quote — 9-3 -->
+  <section class="section philosophy" data-reveal>
+    <div class="container container--wide">
+      <div class="grid">
+        <div style="grid-column:1/10">
+          <p class="philosophy__statement">LUNARA, 일상을 다르게<br>담는 시선.<br>가장 자연스러운 순간을<br>가장 세심하게 그려냅니다.</p>
+        </div>
+        <div style="grid-column:10/13">
+          <blockquote class="quote">
+            <p class="quote__text">"촬영 내내 브랜드의 결을 이해하고 있다는 게 느껴졌어요. 결과물이 아니라 과정부터 안심할 수 있었습니다."</p>
+            <p class="quote__author">이서연 · Fritz Coffee 마케팅팀</p>
+          </blockquote>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About / History — 8-4 heading, then static 4-4-4 year columns -->
+  <section class="section history" data-reveal>
+    <div class="container container--wide">
+      <div class="grid">
+        <div style="grid-column:1/9">
+          <h2 class="history__title">History of<br>LUNARA</h2>
+          <p class="history__body measure">2021년, 세 명의 에디터가 모여 시작한 작은 기록 프로젝트가 지금은 라이프스타일 브랜드와 공간을 위한 콘텐츠 스튜디오로 자랐습니다.</p>
+        </div>
+        <div class="img history__placeholder" style="grid-column:9/13"></div>
+      </div>
+
+      <div class="grid history__years">
+        <div class="history__year" style="grid-column:1/5">
+          <p class="history__year-num">2026</p>
+          <ul class="history__list">
+            <li>라이프스타일 필름 레이블 론칭</li>
+            <li>서울 스튜디오 확장 이전</li>
+          </ul>
+        </div>
+        <div class="history__year" style="grid-column:5/9">
+          <p class="history__year-num">2025</p>
+          <ul class="history__list">
+            <li>연간 파트너 브랜드 12곳 돌파</li>
+            <li>웰니스 저널 시리즈 발행 시작</li>
+            <li>공간 화보 전담팀 신설</li>
+          </ul>
+        </div>
+        <div class="history__year" style="grid-column:9/13">
+          <p class="history__year-num">2024</p>
+          <ul class="history__list">
+            <li>LUNARA 스튜디오 정식 설립</li>
+            <li>첫 브랜드 다큐멘터리 공개</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio bento — row1 3-3-6 / row2 3-3-3-3 -->
+  <section class="section portfolio" data-reveal>
+    <div class="container container--wide">
+      <p class="eyebrow">Selected Works</p>
+      <div class="grid portfolio__grid">
+        <article class="card card--project" style="grid-column:1/4">
+          <div class="img card--project__image"></div>
+          <p class="card--project__title">보드게임 카페 화보</p>
+          <p class="card--project__meta">Campaign<br>Client. Korea Boardgames</p>
+        </article>
+        <article class="card card--project" style="grid-column:4/7">
+          <div class="img card--project__image"></div>
+          <p class="card--project__title">캠퍼스 매거진</p>
+          <p class="card--project__meta">Editorial<br>Client. Taejae University</p>
+        </article>
+        <article class="card card--project" style="grid-column:7/13">
+          <div class="img card--project__image"></div>
+          <p class="card--project__title">브랜드 무드필름</p>
+          <p class="card--project__meta">Film<br>Client. KRAFTON</p>
+        </article>
+
+        <article class="card card--project" style="grid-column:1/4">
+          <div class="img card--project__image"></div>
+          <p class="card--project__title">아뮤어 포트레이트</p>
+          <p class="card--project__meta">Editorial<br>Client. Amore Courvoisier</p>
+        </article>
+        <article class="card card--project" style="grid-column:4/7">
+          <div class="img card--project__image"></div>
+          <p class="card--project__title">사옥 스페이스 필름</p>
+          <p class="card--project__meta">Editorial<br>Client. HYBE Corp</p>
+        </article>
+        <article class="card card--project" style="grid-column:7/10">
+          <div class="img card--project__image"></div>
+          <p class="card--project__title">워크웨어 룩북</p>
+          <p class="card--project__meta">Editorial<br>Client. TONEWORK</p>
+        </article>
+        <article class="card card--project" style="grid-column:10/13">
+          <div class="img card--project__image"></div>
+          <p class="card--project__title">데일리 오브제 화보</p>
+          <p class="card--project__meta">Editorial<br>Client. Amore Ourway</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact — centered 6/12 form, internal 6-6 pairs -->
+  <section class="section contact" data-reveal>
+    <div class="container container--wide">
+      <div class="grid">
+        <form class="contact__form" style="grid-column:4/10">
+          <p class="eyebrow">Contact</p>
+          <h2 class="contact__title">함께 만들고 싶은<br>이야기를 들려주세요</h2>
+
+          <div class="grid grid--snug contact__row">
+            <label class="field" style="grid-column:1/7">
+              <span class="field__label">회사명</span>
+              <input class="field__input" type="text" name="company" placeholder="회사명을 입력해주세요">
+            </label>
+            <label class="field" style="grid-column:7/13">
+              <span class="field__label">담당자명</span>
+              <input class="field__input" type="text" name="manager" placeholder="담당자명을 입력해주세요">
+            </label>
+          </div>
+
+          <div class="grid grid--snug contact__row">
+            <label class="field" style="grid-column:1/7">
+              <span class="field__label">연락처</span>
+              <input class="field__input" type="tel" name="phone" placeholder="연락처를 입력해주세요">
+            </label>
+            <label class="field" style="grid-column:7/13">
+              <span class="field__label">이메일</span>
+              <input class="field__input" type="email" name="email" placeholder="이메일을 입력해주세요">
+            </label>
+          </div>
+
+          <div class="grid grid--snug contact__row">
+            <label class="field" style="grid-column:1/7">
+              <span class="field__label">카테고리</span>
+              <select class="field__input" name="category">
+                <option>브랜드 필름</option>
+                <option>공간 화보</option>
+                <option>에디토리얼</option>
+                <option>기타</option>
+              </select>
+            </label>
+            <label class="field" style="grid-column:7/13">
+              <span class="field__label">예산 범위</span>
+              <select class="field__input" name="budget">
+                <option>500만원 이하</option>
+                <option>500 – 1,000만원</option>
+                <option>1,000 – 3,000만원</option>
+                <option>3,000만원 이상</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="field field--full">
+            <span class="field__label">문의 내용</span>
+            <textarea class="field__input field__textarea" name="message" placeholder="프로젝트에 대해 자유롭게 알려주세요"></textarea>
+          </label>
+
+          <button type="submit" class="btn btn--outline contact__submit">문의 보내기</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer — flex row -->
+  <footer class="footer" data-reveal>
+    <div class="container container--wide footer__inner">
+      <div class="footer__row">
+        <div class="footer__block">
+          <p class="footer__label">Business</p>
+          <p class="footer__value">LUNARA STUDIO</p>
+        </div>
+        <div class="footer__block">
+          <p class="footer__label">Address</p>
+          <p class="footer__value">서울특별시 성동구 성수이로 12길 8</p>
+        </div>
+        <div class="footer__block">
+          <p class="footer__label">Phone</p>
+          <p class="footer__value">+82 2 1234 5678</p>
+        </div>
+        <div class="footer__block">
+          <p class="footer__label">Instagram</p>
+          <p class="footer__value">@lunara.studio</p>
+        </div>
+      </div>
+      <p class="footer__copy">© 2026 LUNARA STUDIO. All content reserved.</p>
+    </div>
+  </footer>
+
+</main>
+
+<script src="js/main.js"></script>
+</body>
+</html>
