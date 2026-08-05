@@ -18,25 +18,21 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
   margin-bottom:var(--space-6);
 }
 
-/* ---------- hero ---------- */
+/* ---------- hero (실측 순서: image → eyebrow → wordmark) ---------- */
 .hero{padding-top:var(--space-11);text-align:center;}
-.hero__inner{display:flex;flex-direction:column;align-items:center;}
-.hero__image{
-  aspect-ratio:16/9;
-  max-width:920px;
+.hero__inner{
+  display:flex;flex-direction:column;align-items:center;
   border-block:1px solid var(--brand-border);
+  padding-block:var(--space-9);
 }
+.hero__image{aspect-ratio:16/9;max-width:920px;}
+.hero .eyebrow{margin-top:var(--space-7);margin-bottom:0;}
 .hero__wordmark{
-  margin-top:var(--space-8);
+  margin-top:var(--space-5);
   font-size:var(--fs-display-lg);
   font-weight:var(--fw-strong);
   line-height:var(--lh-display);
   letter-spacing:var(--display-tracking);
-}
-.hero__caption{
-  margin-top:var(--space-4);
-  font-size:var(--fs-body-2);
-  color:var(--brand-text-subtle);
 }
 
 /* ---------- featured work ---------- */
@@ -44,19 +40,20 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-strong);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
 
-/* ---------- philosophy + quote ---------- */
+/* ---------- philosophy + needs cards ---------- */
 .philosophy{background:var(--brand-bg-raised);}
 .philosophy__statement{
   font-size:var(--fs-h1);
   font-weight:var(--fw-strong);
   line-height:var(--lh-h1);
 }
-.quote{
-  border-left:1px solid var(--brand-border);
-  padding-left:var(--space-5);
+.philosophy__needs{display:flex;flex-direction:column;gap:var(--space-4);}
+.need-card{
+  background:var(--brand-bg);
+  border-top:1px solid var(--brand-border);
+  padding:var(--space-5) var(--space-6);
 }
-.quote__text{font-size:var(--fs-body-2);line-height:var(--lh-body);margin-bottom:var(--space-4);}
-.quote__author{font-size:var(--fs-badge);color:var(--brand-text-subtle);}
+.need-card__text{font-size:var(--fs-body-1);line-height:var(--lh-body);}
 
 /* ---------- history ---------- */
 .history__title{
@@ -69,14 +66,16 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .history__placeholder{aspect-ratio:1/1;}
 .history__years{margin-top:var(--space-10);padding-top:var(--space-7);border-top:1px solid var(--brand-border);}
 .history__year{border-left:1px solid var(--brand-border);padding-left:var(--space-5);}
-.history__year-num{font-size:var(--fs-h2);font-weight:var(--fw-strong);margin-bottom:var(--space-4);}
+.history__year-num{font-size:var(--fs-h1);font-weight:var(--fw-strong);margin-bottom:var(--space-4);}
 .history__list li{
+  display:flex;gap:var(--space-3);
   font-size:var(--fs-body-2);
   color:var(--brand-text-subtle);
   padding-block:var(--space-2);
   border-top:1px solid var(--brand-border);
 }
 .history__list li:last-child{border-bottom:1px solid var(--brand-border);}
+.history__month{color:var(--text-default-inverse);}
 
 /* ---------- portfolio bento ---------- */
 .portfolio__grid{row-gap:var(--space-9);}
@@ -84,14 +83,11 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .card--project__title{font-size:var(--fs-body-1);font-weight:var(--fw-strong);margin-bottom:var(--space-2);}
 .card--project__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
 
-/* ---------- contact ---------- */
-.contact__form{padding-block:var(--space-9);}
-.contact__title{
-  font-size:var(--fs-h1);
-  font-weight:var(--fw-strong);
-  line-height:var(--lh-h1);
-  margin-bottom:var(--space-9);
-}
+/* ---------- contact (실측: 전체 폭 어두운 패널 + 장식용 세로 디바이더 3개, 중앙 폼) ---------- */
+.contact--panel{position:relative;background:var(--brand-bg-raised);overflow:hidden;}
+.contact__dividers{position:absolute;inset:0;pointer-events:none;}
+.contact__dividers span{position:absolute;top:0;bottom:0;width:1px;background:var(--brand-line);}
+.contact__form{padding-block:var(--space-9);position:relative;}
 .contact__row{margin-bottom:var(--space-6);}
 .field{display:flex;flex-direction:column;gap:var(--space-2);}
 .field--full{margin-bottom:var(--space-8);}
@@ -110,6 +106,15 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .field__textarea{min-height:160px;resize:vertical;}
 select.field__input{appearance:none;}
 
+.contact__attach{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:var(--space-4);
+  border-top:1px solid var(--brand-line);
+  margin-bottom:var(--space-8);
+}
+.contact__attach-label{font-size:var(--fs-badge);color:var(--brand-text-subtle);}
+.contact__attach-input{font-size:var(--fs-body-2);color:var(--text-default-inverse);}
+
 .btn{
   display:inline-block;
   font-size:var(--fs-body-1);
@@ -124,22 +129,24 @@ select.field__input{appearance:none;}
   color:var(--text-default-inverse);
 }
 
-/* ---------- footer ---------- */
-.footer{border-top:1px solid var(--brand-border);padding-block:var(--space-9);}
+/* ---------- footer (실측: 중앙 이메일 → business/address/phone/instagram 자연폭 flex → 중앙 카피) ---------- */
+.footer{border-top:1px solid var(--brand-line);padding-block:var(--space-8);text-align:center;}
+.footer__email{font-size:var(--fs-h3);font-weight:var(--fw-base);}
 .footer__row{
   display:flex;
   flex-wrap:wrap;
-  justify-content:space-between;
-  gap:var(--space-6);
-  padding-bottom:var(--space-7);
-  border-bottom:1px solid var(--brand-border);
+  justify-content:center;
+  column-gap:var(--space-7);
+  row-gap:var(--space-3);
+  margin-top:var(--space-6);
 }
-.footer__label{font-size:var(--fs-badge);color:var(--brand-text-subtle);margin-bottom:var(--space-2);}
-.footer__value{font-size:var(--fs-body-2);}
+.footer__item{display:flex;align-items:baseline;gap:var(--space-2);}
+.footer__label{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
+.footer__value{font-size:var(--fs-h3);text-transform:uppercase;}
 .footer__copy{
-  margin-top:var(--space-7);
-  text-align:center;
-  font-size:var(--fs-badge);
+  margin-top:var(--space-6);
+  font-size:var(--fs-h3);
+  text-transform:uppercase;
   color:var(--brand-text-subtle);
 }
 
@@ -157,4 +164,6 @@ select.field__input{appearance:none;}
   .contact__form{grid-column:1/13 !important;}
   .contact__row{grid-template-columns:1fr !important;}
   .contact__row .field{grid-column:1/13 !important;}
+  .contact__dividers{display:none;}
+  .footer__row{flex-direction:column;align-items:center;}
 }
