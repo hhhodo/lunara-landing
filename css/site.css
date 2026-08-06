@@ -27,6 +27,17 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .page-lines span.h{top:auto;bottom:auto;left:0;right:0;width:auto;height:1px;}
 main{position:relative;z-index:1;}
 
+/* every image placeholder site-wide gets a small white square dot at each
+   of its 4 corners — layered on top of styles.css's solid placeholder fill */
+.img{
+  position:relative;
+  background-image:
+    linear-gradient(#fff,#fff) top left / 6px 6px no-repeat,
+    linear-gradient(#fff,#fff) top right / 6px 6px no-repeat,
+    linear-gradient(#fff,#fff) bottom left / 6px 6px no-repeat,
+    linear-gradient(#fff,#fff) bottom right / 6px 6px no-repeat;
+}
+
 .eyebrow{
   font-size:var(--fs-badge);
   font-weight:var(--fw-base);
@@ -42,23 +53,14 @@ main{position:relative;z-index:1;}
   border-block:1px solid var(--brand-border);
   padding-block:var(--space-9);
 }
-/* full width of the 10-col content box so its left/right edges land exactly
-   on the page grid lines (scales naturally at any viewport, incl. 2560) */
+/* center 4 of 12 page columns: hero__inner's content box is already the
+   inner 10 columns (2–11), so 40% of that = 4/12 of the full page width —
+   its edges land exactly on the existing 33.33%/66.67% vertical grid lines */
 .hero__image{
-  position:relative;
-  width:100%;
+  width:40%;
   aspect-ratio:16/9;
   border:1px solid var(--brand-line-bright);
 }
-.hero__image .corner-dot{
-  position:absolute;
-  width:6px;height:6px;
-  background:#fff;
-}
-.hero__image .corner-dot--tl{top:-3px;left:-3px;}
-.hero__image .corner-dot--tr{top:-3px;right:-3px;}
-.hero__image .corner-dot--bl{bottom:-3px;left:-3px;}
-.hero__image .corner-dot--br{bottom:-3px;right:-3px;}
 .hero .eyebrow{margin-top:var(--space-7);margin-bottom:0;}
 .hero__wordmark{
   margin-top:var(--space-5);
@@ -69,7 +71,14 @@ main{position:relative;z-index:1;}
 }
 
 /* ---------- featured work ---------- */
-.card--work__image{aspect-ratio:4/3;margin-bottom:var(--space-5);}
+/* inset 50px in from each column line (cards sit flush against them at
+   0 gutter), centered, tall portrait ratio instead of the flush 4:3 block */
+.card--work__image{
+  width:calc(100% - 100px);
+  margin-inline:auto;
+  aspect-ratio:3/4;
+  margin-bottom:var(--space-5);
+}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
 
