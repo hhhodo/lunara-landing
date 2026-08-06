@@ -118,21 +118,21 @@ main{position:relative;z-index:1;}
   letter-spacing:var(--display-tracking);
 }
 
-/* ---------- featured work: horizontal scroll track ----------
-   Card width is a true grid unit (100vw/12 * 3 = 25vw, i.e. 3 real page
-   columns), not a fraction of the track's own box — a fraction-based width
-   only ever guaranteed the FIRST card's edges matched a real line; every
-   later card boundary landed wherever that fraction's math happened to put
-   it, not on the actual grid. gap:0 so nothing but card width itself
-   determines spacing — every boundary between every card is therefore also
-   an exact multiple of 8.3333vw (one page column) from the track's own
-   start, which itself starts flush at a true line (padding-inline). */
+/* ---------- featured work: horizontal scroll track ---------- */
 .featured__track{
   gap:0;
   padding-inline:calc(100% / 12);
   padding-block:var(--space-6) var(--space-2);
 }
-.card--work{flex:0 0 25vw;padding-inline:var(--space-5);}
+/* 3 real page columns, expressed as % of the track's own content box (not
+   vw): the track has padding-inline:calc(100%/12) on BOTH sides, so its
+   content box is 10/12 of the page — 3 columns of that = (3/12)/(10/12) =
+   30%. vw was wrong here: vw always equals the full viewport including the
+   scrollbar, while % is relative to the content box (scrollbar excluded),
+   so the two units silently drift apart — worse on wider screens, since
+   the (constant, ~15px) scrollbar gap is a bigger fraction of each column
+   at any width but the error compounds per card either way. */
+.card--work{flex:0 0 30%;padding-inline:var(--space-5);}
 .card--work__image{aspect-ratio:2/3;margin-bottom:var(--space-5);}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
@@ -198,11 +198,12 @@ main{position:relative;z-index:1;}
   padding-inline:calc(100% / 12) 0;
   padding-block:var(--space-7) var(--space-2);
 }
-/* true grid unit (100vw/12 * 4 = 33.333vw = 4 real page columns), same
-   reasoning as .card--work above — gap:0 so every card boundary, not just
-   the track's own start, lands on a real vertical line */
+/* 4 real page columns, expressed as % of the track's own content box (not
+   vw — see the .card--work comment above for why vw drifts off the grid).
+   Padding-inline here is LEFT ONLY (calc(100%/12) 0), so content box is
+   11/12 of the page — 4 columns of that = (4/12)/(11/12) = 4/11. */
 .history__year{
-  flex:0 0 33.333vw;
+  flex:0 0 calc(400% / 11);
   border-left:1px solid var(--brand-border);
   padding-left:var(--space-6);
   padding-right:var(--space-6);
