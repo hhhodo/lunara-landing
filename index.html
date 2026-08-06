@@ -45,7 +45,7 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
 
   <!-- Hero: image → eyebrow → wordmark (실측 순서) -->
   <section class="section hero" data-reveal>
-    <div class="container container--wide hero__inner">
+    <div class="bleed hero__inner">
       <div class="img hero__image" aria-hidden="true"></div>
       <p class="eyebrow">Lifestyle Content Studio</p>
       <h1 class="hero__wordmark">LUNARA</h1>
@@ -54,9 +54,9 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
 
   <!-- Featured work — 4-4-4 -->
   <section class="section featured" data-reveal>
-    <div class="container container--wide">
+    <div class="bleed">
       <p class="eyebrow">Featured</p>
-      <div class="grid featured__grid">
+      <div class="grid grid--flush featured__grid">
         <article class="card card--work" style="grid-column:1/5">
           <div class="img card--work__image"></div>
           <p class="card--work__title">모닝 루틴 다큐멘터리</p>
@@ -78,8 +78,8 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
 
   <!-- Philosophy + needs cards — 9-3 (실측 1113.3/546.7 → 9-3), 카드는 원본 5장 중 앞 2장만 정적 배치 -->
   <section class="section philosophy" data-reveal>
-    <div class="container container--wide">
-      <div class="grid">
+    <div class="bleed">
+      <div class="grid grid--flush">
         <div style="grid-column:1/10">
           <p class="philosophy__statement">LUNARA, 일상을<br>다르게 담는 시선.<br>가장 자연스러운 순간을<br>가장 세심하게 그려냅니다.</p>
         </div>
@@ -97,8 +97,8 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
 
   <!-- About / History — 8-4 heading, then static 4-4-4 year columns -->
   <section class="section history" data-reveal>
-    <div class="container container--wide">
-      <div class="grid">
+    <div class="bleed">
+      <div class="grid grid--flush">
         <div style="grid-column:1/9">
           <h2 class="history__title">History of<br>LUNARA</h2>
           <p class="history__body measure">2021년, 세 명의 에디터가 모여 시작한 작은 기록 프로젝트가 지금은 라이프스타일 브랜드와 공간을 위한 콘텐츠 스튜디오로 자랐습니다.</p>
@@ -106,7 +106,7 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
         <div class="img history__placeholder" style="grid-column:9/13"></div>
       </div>
 
-      <div class="grid history__years">
+      <div class="grid grid--flush history__years">
         <div class="history__year" style="grid-column:1/5">
           <p class="history__year-num">2026</p>
           <ul class="history__list">
@@ -155,9 +155,9 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
 
   <!-- Portfolio bento — row1 3-3-6 / row2 3-3-3-3 -->
   <section class="section portfolio" data-reveal>
-    <div class="container container--wide">
+    <div class="bleed">
       <p class="eyebrow">Selected Works</p>
-      <div class="grid portfolio__grid">
+      <div class="grid grid--flush portfolio__grid">
         <article class="card card--project" style="grid-column:1/4">
           <div class="img card--project__image"></div>
           <p class="card--project__title">보드게임 카페 화보</p>
@@ -201,14 +201,14 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
   <!-- Contact — 실측: 전체 폭 어두운 패널(장식용 세로 디바이더 480/960/1440), 중앙 960/1680(6/12) 폼 -->
   <section class="section contact contact--panel" data-reveal>
     <div class="contact__dividers" aria-hidden="true">
-      <span style="left:calc(120px + 480 / 1680 * 100%)"></span>
-      <span style="left:calc(120px + 960 / 1680 * 100%)"></span>
-      <span style="left:calc(120px + 1440 / 1680 * 100%)"></span>
+      <span style="left:25%"></span>
+      <span style="left:50%"></span>
+      <span style="left:75%"></span>
     </div>
-    <div class="container container--wide">
-      <div class="grid">
+    <div class="bleed">
+      <div class="grid grid--flush">
         <form class="contact__form" style="grid-column:4/10">
-          <div class="grid grid--snug contact__row">
+          <div class="grid grid--flush contact__row">
             <label class="field" style="grid-column:1/7">
               <span class="field__label">회사명</span>
               <input class="field__input" type="text" name="company">
@@ -219,7 +219,7 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
             </label>
           </div>
 
-          <div class="grid grid--snug contact__row">
+          <div class="grid grid--flush contact__row">
             <label class="field" style="grid-column:1/7">
               <span class="field__label">연락처</span>
               <input class="field__input" type="tel" name="phone">
@@ -230,7 +230,7 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
             </label>
           </div>
 
-          <div class="grid grid--snug contact__row">
+          <div class="grid grid--flush contact__row">
             <label class="field" style="grid-column:1/7">
               <span class="field__label">카테고리</span>
               <select class="field__input" name="category">
@@ -269,7 +269,7 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
 
   <!-- Footer — 실측 그대로: 중앙 이메일 1행 → business/address/phone/instagram 자연폭 flex 2행 → 중앙 카피라이트 -->
   <footer class="footer" data-reveal>
-    <div class="container container--wide footer__inner">
+    <div class="bleed footer__inner">
       <p class="footer__email">Contact@lunara.studio</p>
       <div class="footer__row">
         <div class="footer__item">
