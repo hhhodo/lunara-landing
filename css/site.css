@@ -83,7 +83,7 @@ main{position:relative;z-index:1;}
 .card--work__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
 
 /* ---------- philosophy + needs cards ---------- */
-.philosophy{background:var(--brand-bg-raised);}
+.philosophy{}
 .philosophy__statement{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
