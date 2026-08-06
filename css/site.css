@@ -41,17 +41,22 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .h-scroll.is-dragging{cursor:grabbing;user-select:none;}
 
 /* pinned horizontal-reveal — History years only (Philosophy went back to a
-   plain vertical stack, see below). The section stays fixed on screen
-   (position:sticky inside a tall spacer) for the scroll distance needed to
-   reveal every card in [data-pin-track] one discrete step at a time
-   (js/main.js initPinScroll) — the page only continues past the section
-   once every card has been shown. Opaque background on the sticky layer so
-   the page's own scrolling background (page-lines etc.) can't show through
-   and appear to "move" behind the pinned content. */
+   plain vertical stack, see below). Deliberately NOT position:sticky: an
+   ancestor with an active `transform` (e.g. this project's [data-reveal]
+   fade/rise-in, which WAS on this section) creates a new containing block
+   and silently breaks sticky/fixed descendants in most engines — that's
+   why the pin never visually held and the background behind kept
+   "scrolling through". Section's data-reveal was removed and the pin itself
+   is done manually in js/main.js (toggling position:fixed/absolute + top
+   based on scroll position), which has no such containing-block gotcha.
+   Opaque background so the page's own scrolling background (page-lines
+   etc.) can't show through while pinned. */
 .pin-scroll__spacer{position:relative;}
 .pin-scroll__sticky{
-  position:sticky;
+  position:absolute;
   top:0;
+  left:0;
+  width:100%;
   height:100vh;
   display:flex;
   align-items:center;

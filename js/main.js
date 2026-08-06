@@ -41,20 +41,28 @@
   });
 
   // ---------- History: pinned, ONE-CARD-PER-STEP reveal ----------
-  // The section (.pin-scroll) sticks to the viewport via position:sticky inside
-  // a tall spacer, for exactly the scroll distance needed to step through every
-  // year. Scroll progress through that spacer is quantized to a discrete step
-  // index (one per card) rather than driving the transform continuously 1:1 —
-  // .history__years only gets a NEW transform value when the step actually
-  // changes, so its own CSS transition plays a clean "탁탁" snap between
-  // fixed positions instead of smoothly sliding with the raw scroll. Whichever
-  // card is the current step gets .is-active (brightens its divider white).
+  // Manual pin instead of position:sticky (see the CSS comment on
+  // .pin-scroll__sticky for why: an ancestor transform silently breaks
+  // sticky/fixed descendants, which is what was happening here). While the
+  // spacer spans the viewport, .pin-scroll__sticky is switched to
+  // position:fixed so it visually holds in place; before/after that range
+  // it's pinned to the spacer's own top/bottom via position:absolute so it
+  // scrolls normally into and out of view like anything else.
+  //
+  // Extra scroll length is sized off the track's actual overflow (like a
+  // normal horizontal scroller would need), not an arbitrary per-card
+  // multiplier — six ~2.5-visible cards previously produced 600vh of mostly
+  // empty scrolling. Progress through that distance is quantized to one
+  // discrete step per card: the track's transform only changes (via its own
+  // CSS transition, for the "탁탁" snap) when the step actually advances.
   const historySection = document.querySelector('.history.pin-scroll');
   if (historySection) {
     const spacer = historySection.querySelector('.pin-scroll__spacer');
+    const sticky = historySection.querySelector('.pin-scroll__sticky');
     const track = historySection.querySelector('[data-pin-track]');
     const years = [...track.querySelectorAll('.history__year')];
     let lastStep = -1;
+    let trackDistance = 0;
 
     const padding = () => parseFloat(getComputedStyle(track).paddingInlineStart) || 0;
 
@@ -62,21 +70,35 @@
       if (i === lastStep) return;
       lastStep = i;
       const pad = padding();
-      const max = track.scrollWidth - track.clientWidth;
+      const max = Math.max(0, track.scrollWidth - track.clientWidth);
       const target = Math.max(0, Math.min(years[i].offsetLeft - pad, max));
       track.style.transform = `translateX(${-target}px)`;
       years.forEach((y, idx) => y.classList.toggle('is-active', idx === i));
     };
 
     const measure = () => {
-      // one full screen-height of scroll per card step, so each step is a
-      // deliberate, distinct scroll action rather than a fraction of a swipe
-      spacer.style.height = `${window.innerHeight * years.length}px`;
+      trackDistance = Math.max(0, track.scrollWidth - track.clientWidth);
+      spacer.style.height = `${window.innerHeight + trackDistance}px`;
+    };
+
+    const updatePin = (rect, vh) => {
+      if (rect.top > 0) {
+        sticky.style.position = 'absolute';
+        sticky.style.top = '0px';
+      } else if (rect.bottom < vh) {
+        sticky.style.position = 'absolute';
+        sticky.style.top = `${spacer.offsetHeight - vh}px`;
+      } else {
+        sticky.style.position = 'fixed';
+        sticky.style.top = '0px';
+      }
     };
 
     const apply = () => {
+      const vh = window.innerHeight;
       const rect = spacer.getBoundingClientRect();
-      const total = rect.height - window.innerHeight;
+      updatePin(rect, vh);
+      const total = rect.height - vh;
       const scrolled = Math.min(Math.max(-rect.top, 0), total);
       const progress = total > 0 ? scrolled / total : 0;
       const step = Math.round(progress * (years.length - 1));
@@ -85,6 +107,7 @@
 
     measure();
     goToStep(0);
+    apply();
     window.addEventListener('resize', () => { measure(); lastStep = -1; apply(); });
     window.addEventListener('scroll', () => requestAnimationFrame(apply), { passive: true });
   }
