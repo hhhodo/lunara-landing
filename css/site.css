@@ -1,4 +1,7 @@
-/* LUNARA — brand tokens measured from Figma (node 81:2182), layered on top of styles.css.
+/* SOOM — brand tokens measured from Figma (node 81:2182), layered on top of styles.css.
+   Site pivoted from LUNARA (lifestyle content studio) to SOOM (starch-based
+   incense stick brand); the dark-monotone token values below are unchanged
+   from the original Figma measurement, only their meaning/usage changed.
    styles.css itself is never edited; these are new --brand-* custom properties. */
 :root{
   --brand-bg:#000;
@@ -113,20 +116,21 @@ main{position:relative;z-index:1;}
   letter-spacing:var(--display-tracking);
 }
 
-/* ---------- featured work: horizontal scroll track, ~3.5 cards visible ----------
-   card width is a fraction of the TRACK's own width (not vw-capped, which stopped
-   growing past ~320px and let 5 cards fit entirely on wide screens with nothing
-   left to scroll). flex:0 0 calc(...) with N=3.5 guarantees the 5th card always
-   overflows regardless of viewport size. */
-/* left edge = exactly 1 real page column (calc(100%/12), same inset as
-   .bleed) so the track's resting-scroll-position left edge lands on the
-   true grid line instead of an arbitrary space token */
+/* ---------- featured work: horizontal scroll track ----------
+   Card width is a true grid unit (100vw/12 * 3 = 25vw, i.e. 3 real page
+   columns), not a fraction of the track's own box — a fraction-based width
+   only ever guaranteed the FIRST card's edges matched a real line; every
+   later card boundary landed wherever that fraction's math happened to put
+   it, not on the actual grid. gap:0 so nothing but card width itself
+   determines spacing — every boundary between every card is therefore also
+   an exact multiple of 8.3333vw (one page column) from the track's own
+   start, which itself starts flush at a true line (padding-inline). */
 .featured__track{
-  gap:var(--space-6);
+  gap:0;
   padding-inline:calc(100% / 12);
   padding-block:var(--space-6) var(--space-2);
 }
-.card--work{flex:0 0 calc((100% - 2.5 * var(--space-6)) / 3.5);}
+.card--work{flex:0 0 25vw;padding-inline:var(--space-5);}
 .card--work__image{aspect-ratio:3/4;margin-bottom:var(--space-5);}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
@@ -192,8 +196,11 @@ main{position:relative;z-index:1;}
   padding-inline:calc(100% / 12) 0;
   padding-block:var(--space-7) var(--space-2);
 }
+/* true grid unit (100vw/12 * 4 = 33.333vw = 4 real page columns), same
+   reasoning as .card--work above — gap:0 so every card boundary, not just
+   the track's own start, lands on a real vertical line */
 .history__year{
-  flex:0 0 calc(100% / 2.5);
+  flex:0 0 33.333vw;
   border-left:1px solid var(--brand-border);
   padding-left:var(--space-6);
   padding-right:var(--space-6);
@@ -296,4 +303,9 @@ select.field__input{appearance:none;}
   .contact__row .field{grid-column:1/13 !important;}
   .contact__dividers{display:none;}
   .footer__row{flex-direction:column;align-items:center;}
+  /* 25vw/33.333vw cards get too cramped on narrow phone widths — widen to
+     a comfortable single-card-plus-peek view; grid-line alignment matters
+     less at this width anyway since columns are already very narrow */
+  .card--work{flex-basis:78vw;}
+  .history__year{flex-basis:82vw;}
 }

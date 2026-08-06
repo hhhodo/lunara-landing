@@ -16,29 +16,32 @@ spacing=space-section
 <!--
 layout: (실측: get_design_context 섹션별 개별 호출, 81:2183/81:1498/81:3558/81:4621/81:2354/81:3221)
 Hero          → 이미지 → eyebrow → 워드마크. 이미지는 페이지 12컬럼 기준 가운데 4컬럼(40% of 10-col box)
-Featured      → 3-3-3(local grid--10, 10컬럼 중 9칸 사용) — 카드 경계가 실제 페이지 라인과 일치
-Philosophy    → 9-3, 좌 스테이트먼트 + 우 니즈 카드 2개 정적 스택
-About/History → 헤딩 7 : 플레이스홀더 3(local grid--10) — 이미지 경계가 실제 라인과 일치, 아래 6개년 3-3(2행)
-Portfolio     → row1 3-3-4 / row2 3-3-2-2 (local grid--10, 실제 라인과 일치하도록 12→10 스케일 재계산)
+Featured      → 가로 스크롤 5카드, 카드 폭 = 실제 그리드 3컬럼(25vw) · gap 0 → 모든 카드 경계가 실제 라인과 일치
+Philosophy    → local grid--10: 텍스트 1/7(6 real cols) · 니즈카드 7/11(4 real cols, true line7~11)
+About/History → 헤딩(별도) + 가로 스크롤 6카드, 카드 폭 = 실제 그리드 4컬럼(33.333vw) · gap 0 → 모든 카드 경계가 실제 라인과 일치
+Portfolio     → row1 3-3-4 / row2 3-3-2-2 (local grid--10, 실제 라인과 일치)
+Contact       → 배경 전체 어두운 패널 위 중앙 6/12 폼(480–1440/1680), 4분할 지점에 세로 디바이더 3개(장식용)
+Footer        → 중앙 이메일 1행 → business/address/phone/instagram 라벨+값 2행(자연폭 flex) → 중앙 카피라이트
 
-주: featured__grid/history 상단/portfolio__grid는 .bleed(10컬럼 폭) 안에서 다시 12등분하면 실제
-페이지 라인과 어긋나므로, 전용 .grid--10(10등분)으로 바꿔 카드/이미지 경계가 실제 세로 라인과
-정확히 겹치도록 재계산했다 (사용자 피드백: "이미지랑 라인이랑 맞게 해줘").
-Contact       → 배경 전체 어두운 패널 위 중앙 6/12 폼(480–1440/1680), 4분할 지점에 실측 세로 디바이더 3개(장식용, 480/960/1440)
-Footer        → 실측 그대로: 중앙 이메일 1행 → business/address/phone/instagram 라벨+값 2행(자연폭 flex) → 중앙 카피라이트
+그리드 정렬 원칙: Featured/History처럼 자유 가로 스크롤 트랙인 섹션은 카드 폭을 "N개 보이게"가 아니라
+"실제 페이지 그리드 컬럼의 정수배(vw 단위)"로 고정하고 gap:0을 줘서, 트랙 시작점(1컬럼 인셋)뿐 아니라
+모든 카드 경계가 실제 세로 라인과 겹치도록 함 (반복된 사용자 피드백: "그리드부터 좀 맞춰").
 
 Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
 - Top nav bar (Artists/Productions/Contact anchor links) — page navigation, removed entirely
 - Featured-work scroll-progress tick indicator — pagination-dot equivalent, removed
 - Testimonial "01/05" step counter 텍스트 — 캐러셀 페이지네이션이라 제외 (카드 콘텐츠 자체는 정적 스택으로 유지)
+
+브랜드: SOOM (숨) — 전분(starch) 소재로 성형한 인센스 스틱 브랜드. LUNARA(라이프스타일 콘텐츠
+스튜디오)에서 전면 피벗. 브랜드명은 영문, 본문은 한글.
 -->
 <!DOCTYPE html>
 <html lang="ko" data-scale="editorial">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LUNARA — 일상을 다르게 담는 라이프스타일 콘텐츠 스튜디오</title>
-<meta name="description" content="LUNARA는 브랜드와 공간의 가장 자연스러운 순간을 기록하는 라이프스타일 콘텐츠 스튜디오입니다.">
+<title>SOOM — 전분으로 빚은 인센스 스틱 브랜드</title>
+<meta name="description" content="SOOM은 전분을 성형해 맑은 연기와 은은한 잔향을 남기는 인센스 스틱 브랜드입니다.">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="css/styles.css">
 <link rel="stylesheet" href="css/site.css">
@@ -66,192 +69,190 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
   <section class="section hero" data-reveal>
     <div class="bleed hero__inner">
       <div class="img hero__image" aria-hidden="true"></div>
-      <p class="eyebrow">Lifestyle Content Studio</p>
-      <h1 class="hero__wordmark">LUNARA</h1>
+      <p class="eyebrow">Starch-Based Incense Studio</p>
+      <h1 class="hero__wordmark">SOOM</h1>
     </div>
   </section>
 
-  <!-- Featured work — horizontal scroll track, 5 cards -->
+  <!-- Featured — 시그니처 컬렉션, 가로 스크롤 5카드 (카드 폭 = 실제 그리드 3컬럼) -->
   <section class="section featured" data-reveal>
     <div class="bleed">
-      <p class="eyebrow">Featured</p>
+      <p class="eyebrow">Signature Collection</p>
     </div>
     <div class="h-scroll featured__track">
       <article class="card card--work">
         <div class="img card--work__image"></div>
-        <p class="card--work__title">모닝 루틴 다큐멘터리</p>
-        <p class="card--work__meta">필름 · 브랜디드 콘텐츠<br>Client. Aesop Korea</p>
+        <p class="card--work__title">우디 시더우드</p>
+        <p class="card--work__meta">우디 · 인센스 스틱<br>연소시간 약 40분</p>
       </article>
       <article class="card card--work">
         <div class="img card--work__image"></div>
-        <p class="card--work__title">리빙 브랜드 캠페인</p>
-        <p class="card--work__meta">캠페인 · 공간 화보<br>Client. Fritz Coffee</p>
+        <p class="card--work__title">스모키 팔로산토</p>
+        <p class="card--work__meta">스모키 · 인센스 스틱<br>연소시간 약 35분</p>
       </article>
       <article class="card card--work">
         <div class="img card--work__image"></div>
-        <p class="card--work__title">웰니스 저널 시리즈</p>
-        <p class="card--work__meta">시리즈 · 에디토리얼<br>Client. Class101</p>
+        <p class="card--work__title">플로럴 히노키</p>
+        <p class="card--work__meta">플로럴 · 인센스 스틱<br>연소시간 약 40분</p>
       </article>
       <article class="card card--work">
         <div class="img card--work__image"></div>
-        <p class="card--work__title">공간 화보 아카이브</p>
-        <p class="card--work__meta">에디토리얼 · 공간<br>Client. Fritz Coffee</p>
+        <p class="card--work__title">스파이스 시나몬</p>
+        <p class="card--work__meta">스파이시 · 인센스 스틱<br>연소시간 약 30분</p>
       </article>
       <article class="card card--work">
         <div class="img card--work__image"></div>
-        <p class="card--work__title">브랜드 다큐멘터리</p>
-        <p class="card--work__meta">필름 · 다큐멘터리<br>Client. Aesop Korea</p>
+        <p class="card--work__title">그린 베티버</p>
+        <p class="card--work__meta">그린 · 인센스 스틱<br>연소시간 약 45분</p>
       </article>
     </div>
   </section>
 
-  <!-- Philosophy — local grid--10: 텍스트 1/7(6 real cols, position:sticky로 계속 화면에 고정)
-       / 카드열 7/11(4 real cols, true line7~11에 맞닿음). 카드는 세로로 하나씩 쌓여 스크롤에
-       따라 위→아래로 순서대로 떠오름([data-reveal] stagger) — 가로 스크롤/드래그 아님. -->
+  <!-- Philosophy — local grid--10: 텍스트 1/7(6 real cols) / 니즈카드 7/11(4 real cols, true line7~11) -->
   <section class="section philosophy">
     <div class="bleed">
       <div class="grid grid--flush grid--10">
         <div class="philosophy__text" style="grid-column:1/7">
-          <p class="philosophy__statement">LUNARA, 일상을<br>다르게 담는 시선.<br>가장 자연스러운 순간을<br>가장 세심하게 그려냅니다.</p>
+          <p class="philosophy__statement">SOOM, 태우는 게 아니라<br>머무는 향.<br>전분으로 빚어<br>가장 맑은 연기를 남깁니다.</p>
         </div>
         <div class="philosophy__needs" style="grid-column:7/11">
           <div class="need-card" data-reveal style="transition-delay:0s">
             <svg class="need-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <rect x="2.5" y="7" width="19" height="13" rx="1"/>
-              <path d="M8 7 9.5 4h5L16 7"/>
-              <circle cx="12" cy="13.5" r="3.5"/>
+              <path d="M4 20C4 11 11 4 20 4c0 9-7 16-16 16Z"/>
+              <path d="M4 20 13 11"/>
             </svg>
-            <p class="need-card__text">촬영 전, 우리 브랜드만의<br>결을 함께 찾고 싶어요.</p>
+            <p class="need-card__text">합성향료 없이<br>편안하게 향을<br>즐기고 싶어요.</p>
           </div>
           <div class="need-card" data-reveal style="transition-delay:.08s">
             <svg class="need-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <rect x="3" y="8" width="18" height="12" rx="1"/>
-              <path d="M2.5 8 4 3.5h16L21.5 8"/>
-              <path d="M10 12.5h4"/>
+              <path d="M12 21V9"/>
+              <ellipse cx="12" cy="21" rx="4" ry="1.2"/>
+              <path d="M12 9c-1.2-1.5.8-2 0-3.5S13 3 12 1.5"/>
             </svg>
-            <p class="need-card__text">여러 공간·제품을<br>빠르게 아카이빙하고 싶어요.</p>
+            <p class="need-card__text">타고 남은 재가 적고<br>잘 흩어지지 않으면<br>좋겠어요.</p>
           </div>
           <div class="need-card" data-reveal style="transition-delay:.16s">
             <svg class="need-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <path d="M3 5.5h18v11H8.5L4 20v-3.5H3z"/>
-              <path d="M7.5 10h9M7.5 13h6"/>
+              <path d="M12 4a8 8 0 1 0 5.66 13.66"/>
+              <path d="M12 8a4 4 0 1 0 2.83 6.83"/>
             </svg>
-            <p class="need-card__text">촬영본을 바로<br>SNS에 쓸 수 있게<br>편집까지 받고 싶어요.</p>
+            <p class="need-card__text">은은한 향이<br>오래 지속됐으면<br>해요.</p>
           </div>
           <div class="need-card" data-reveal style="transition-delay:.24s">
             <svg class="need-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <circle cx="12" cy="8" r="4"/>
-              <path d="M4.5 20c0-4.2 3.4-6.5 7.5-6.5s7.5 2.3 7.5 6.5"/>
+              <rect x="3" y="9.5" width="18" height="11" rx="1"/>
+              <path d="M3 9.5h18M12 9.5v11"/>
+              <path d="M8 9.5c-2.2 0-3.3-3.2 0-4.3 2.2-.7 4 1.8 4 4.3"/>
+              <path d="M16 9.5c2.2 0 3.3-3.2 0-4.3-2.2-.7-4 1.8-4 4.3"/>
             </svg>
-            <p class="need-card__text">브랜드 톤에 맞는<br>사진작가를<br>매번 새로 찾기 어려워요.</p>
+            <p class="need-card__text">집들이 선물로<br>포장까지 예뻤으면<br>좋겠어요.</p>
           </div>
           <div class="need-card" data-reveal style="transition-delay:.32s">
             <svg class="need-card__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-              <circle cx="12" cy="12" r="9"/>
-              <path d="M12 7v5l3.5 2"/>
+              <circle cx="8" cy="13" r="3.2"/>
+              <circle cx="16" cy="8.5" r="2.4"/>
+              <circle cx="16.5" cy="16" r="2.6"/>
             </svg>
-            <p class="need-card__text">짧은 일정 안에<br>여러 컷을 안정적으로<br>받고 싶어요.</p>
+            <p class="need-card__text">매번 같은 향 말고<br>다양하게<br>써보고 싶어요.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- About / History — pin/wheel-hijack was tried repeatedly and kept breaking
-       in ways I couldn't verify without a real browser. Simplified to exactly
-       Featured's pattern: plain .h-scroll (native scroll + drag), nothing else.
-       Reliable over fancy. Snapped-nearest year's left line goes white (js, passive). -->
+  <!-- About / History — 헤딩(고정 인트로) + 가로 스크롤 6카드(카드 폭 = 실제 그리드 4컬럼).
+       Featured와 동일한 검증된 방식(순수 h-scroll, 드래그/네이티브 스크롤). -->
   <section class="section history" data-reveal>
     <div class="bleed">
-      <h2 class="history__title">History of<br>LUNARA</h2>
-      <p class="history__body measure">2021년, 세 명의 에디터가 모여 시작한 작은 기록 프로젝트가 지금은 라이프스타일 브랜드와 공간을 위한 콘텐츠 스튜디오로 자랐습니다.</p>
+      <h2 class="history__title">History of<br>SOOM</h2>
+      <p class="history__body measure">2021년, 전분 성형 기술을 연구하던 두 명의 소재 연구원이 시작한 작은 실험실이 지금은 국내 최초 전분 인센스 브랜드로 자랐습니다.</p>
     </div>
     <div class="h-scroll history__years">
         <div class="history__year">
           <p class="history__year-num">2026</p>
           <ul class="history__list">
-            <li><span class="history__month">10</span>도쿄 팝업 스튜디오 오픈 예정</li>
-            <li><span class="history__month">03</span>LUNARA 필름 레이블 론칭</li>
+            <li><span class="history__month">10</span>유럽 편집숍 입점 예정</li>
+            <li><span class="history__month">03</span>SOOM 리추얼 컬렉션 론칭</li>
           </ul>
         </div>
         <div class="history__year">
           <p class="history__year-num">2025</p>
           <ul class="history__list">
-            <li><span class="history__month">12</span>올해의 라이프스타일 스튜디오 선정</li>
-            <li><span class="history__month">06</span>웰니스 저널 시리즈 발행 시작</li>
-            <li><span class="history__month">04</span>연간 파트너 브랜드 12곳 돌파</li>
+            <li><span class="history__month">12</span>올해의 친환경 브랜드 선정</li>
+            <li><span class="history__month">06</span>전분 압축 성형 특허 등록</li>
+            <li><span class="history__month">04</span>연간 판매량 10만 개 돌파</li>
           </ul>
         </div>
         <div class="history__year">
           <p class="history__year-num">2024</p>
           <ul class="history__list">
-            <li><span class="history__month">09</span>서울 성수 스튜디오 확장 이전</li>
-            <li><span class="history__month">02</span>공간 화보 전담팀 신설</li>
+            <li><span class="history__month">09</span>서울 성수 쇼룸 오픈</li>
+            <li><span class="history__month">02</span>무연 라인 출시</li>
           </ul>
         </div>
         <div class="history__year">
           <p class="history__year-num">2023</p>
           <ul class="history__list">
-            <li><span class="history__month">10</span>첫 브랜드 다큐멘터리 공개</li>
-            <li><span class="history__month">05</span>에디토리얼 팀 신설</li>
+            <li><span class="history__month">10</span>첫 백화점 팝업 진행</li>
+            <li><span class="history__month">05</span>재사용 세라믹 홀더 출시</li>
           </ul>
         </div>
         <div class="history__year">
           <p class="history__year-num">2022</p>
           <ul class="history__list">
-            <li><span class="history__month">08</span>첫 브랜드 파트너십 계약 체결</li>
-            <li><span class="history__month">03</span>스튜디오 촬영 공간 개설</li>
+            <li><span class="history__month">08</span>첫 유통 파트너십 체결</li>
+            <li><span class="history__month">03</span>전분 성형 시험 생산 시작</li>
           </ul>
         </div>
         <div class="history__year">
           <p class="history__year-num">2021</p>
           <ul class="history__list">
-            <li><span class="history__month">11</span>LUNARA 스튜디오 정식 설립</li>
+            <li><span class="history__month">11</span>SOOM 연구소 설립</li>
           </ul>
         </div>
     </div>
   </section>
 
-  <!-- Portfolio bento — row1 3-3-6 / row2 3-3-3-3 -->
+  <!-- Portfolio bento — "함께한 공간들" (SOOM을 만나볼 수 있는 공간). row1 3-3-4 / row2 3-3-2-2 -->
   <section class="section portfolio" data-reveal>
     <div class="bleed">
-      <p class="eyebrow">Selected Works</p>
+      <p class="eyebrow">Where to Find SOOM</p>
       <div class="grid grid--flush grid--10 portfolio__grid">
         <article class="card card--project" style="grid-column:1/4">
           <div class="img card--project__image"></div>
-          <p class="card--project__title">보드게임 카페 화보</p>
-          <p class="card--project__meta">Campaign<br>Client. Korea Boardgames</p>
+          <p class="card--project__title">쇼룸 화보</p>
+          <p class="card--project__meta">Retail<br>Client. SOOM Seongsu</p>
         </article>
         <article class="card card--project" style="grid-column:4/7">
           <div class="img card--project__image"></div>
-          <p class="card--project__title">캠퍼스 매거진</p>
-          <p class="card--project__meta">Editorial<br>Client. Taejae University</p>
+          <p class="card--project__title">조용한 서점 카페</p>
+          <p class="card--project__meta">Collaboration<br>Client. Zonto Books</p>
         </article>
         <article class="card card--project" style="grid-column:7/11">
           <div class="img card--project__image"></div>
-          <p class="card--project__title">브랜드 무드필름</p>
-          <p class="card--project__meta">Film<br>Client. KRAFTON</p>
+          <p class="card--project__title">리추얼 무드필름</p>
+          <p class="card--project__meta">Film<br>Client. SOOM Studio</p>
         </article>
 
         <article class="card card--project" style="grid-column:1/4">
           <div class="img card--project__image"></div>
-          <p class="card--project__title">아뮤어 포트레이트</p>
-          <p class="card--project__meta">Editorial<br>Client. Amore Courvoisier</p>
+          <p class="card--project__title">요가 스튜디오 향 큐레이션</p>
+          <p class="card--project__meta">Curation<br>Client. Still Yoga</p>
         </article>
         <article class="card card--project" style="grid-column:4/7">
           <div class="img card--project__image"></div>
-          <p class="card--project__title">사옥 스페이스 필름</p>
-          <p class="card--project__meta">Editorial<br>Client. HYBE Corp</p>
+          <p class="card--project__title">호텔 룸 어메니티</p>
+          <p class="card--project__meta">Amenity<br>Client. Hotel Nuun</p>
         </article>
         <article class="card card--project" style="grid-column:7/9">
           <div class="img card--project__image"></div>
-          <p class="card--project__title">워크웨어 룩북</p>
-          <p class="card--project__meta">Editorial<br>Client. TONEWORK</p>
+          <p class="card--project__title">편집숍 입점 화보</p>
+          <p class="card--project__meta">Retail<br>Client. Object Seoul</p>
         </article>
         <article class="card card--project" style="grid-column:9/11">
           <div class="img card--project__image"></div>
-          <p class="card--project__title">데일리 오브제 화보</p>
-          <p class="card--project__meta">Editorial<br>Client. Amore Ourway</p>
+          <p class="card--project__title">명상 앱 콜라보</p>
+          <p class="card--project__meta">Collaboration<br>Client. Calm Space</p>
         </article>
       </div>
     </div>
@@ -293,19 +294,19 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
             <label class="field" style="grid-column:1/7">
               <span class="field__label">카테고리</span>
               <select class="field__input" name="category">
-                <option>브랜드 필름</option>
-                <option>공간 화보</option>
-                <option>에디토리얼</option>
+                <option>입점 문의</option>
+                <option>도매 문의</option>
+                <option>협업 제안</option>
                 <option>기타</option>
               </select>
             </label>
             <label class="field" style="grid-column:7/13">
-              <span class="field__label">예산범위</span>
-              <select class="field__input" name="budget">
-                <option>500만원 이하</option>
-                <option>500 – 1,000만원</option>
-                <option>1,000 – 3,000만원</option>
-                <option>3,000만원 이상</option>
+              <span class="field__label">예상 주문 수량</span>
+              <select class="field__input" name="quantity">
+                <option>100개 이하</option>
+                <option>100 – 500개</option>
+                <option>500 – 1,000개</option>
+                <option>1,000개 이상</option>
               </select>
             </label>
           </div>
@@ -326,14 +327,14 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
     </div>
   </section>
 
-  <!-- Footer — 실측 그대로: 중앙 이메일 1행 → business/address/phone/instagram 자연폭 flex 2행 → 중앙 카피라이트 -->
+  <!-- Footer — 실측 그대로: 중앙 이메일 1행 → business/address/phone/instagram 라벨+값 2행(자연폭 flex) → 중앙 카피라이트 -->
   <footer class="footer" data-reveal>
     <div class="bleed footer__inner">
-      <p class="footer__email">Contact@lunara.studio</p>
+      <p class="footer__email">Contact@soom.kr</p>
       <div class="footer__row">
         <div class="footer__item">
           <span class="footer__label">business</span>
-          <span class="footer__value">라이프스타일 콘텐츠, 브랜드 필름, 공간 화보</span>
+          <span class="footer__value">전분 인센스 스틱, 리추얼 오브제</span>
         </div>
         <div class="footer__item">
           <span class="footer__label">address</span>
@@ -345,10 +346,10 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
         </div>
         <div class="footer__item">
           <span class="footer__label">instagram</span>
-          <span class="footer__value">@lunara.studio</span>
+          <span class="footer__value">@soom.incense</span>
         </div>
       </div>
-      <p class="footer__copy">©ALL CONTENT RESERVED BY LUNARA</p>
+      <p class="footer__copy">©ALL CONTENT RESERVED BY SOOM</p>
     </div>
   </footer>
 
