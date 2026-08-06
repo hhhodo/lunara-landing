@@ -86,4 +86,27 @@
 
     markActive(findClosest());
   }
+
+  // ---------- History pin: while the section is stuck on screen
+  // (.history-pin__spacer is CSS position:sticky — see site.css, height is
+  // a fixed 220vh so this doesn't depend on any JS measurement to be
+  // visible), redirect vertical wheel/trackpad scroll into the track's
+  // horizontal scrollLeft instead of the page. Once the track has reached
+  // either end, stop intercepting so the page scrolls normally past the
+  // section — this is what makes it feel like scrolling "auto-advances"
+  // the cards while the section holds in place, on top of the manual
+  // drag/native-scroll that already works on the track directly. ----------
+  const historySpacer = document.querySelector('.history-pin__spacer');
+  if (historyTrack && historySpacer) {
+    historySpacer.addEventListener('wheel', (e) => {
+      if (e.deltaY === 0) return;
+      const max = historyTrack.scrollWidth - historyTrack.clientWidth;
+      const atStart = historyTrack.scrollLeft <= 0;
+      const atEnd = historyTrack.scrollLeft >= max - 1;
+      const scrollingDown = e.deltaY > 0;
+      if ((scrollingDown && atEnd) || (!scrollingDown && atStart)) return;
+      e.preventDefault();
+      historyTrack.scrollLeft += e.deltaY;
+    }, { passive: false });
+  }
 })();

@@ -27,7 +27,7 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
    true line k, since the box itself starts flush at true line 1). */
 .grid--10{grid-template-columns:repeat(10,1fr);}
 
-/* horizontal-scroll track — Featured only. Native overflow-x:auto
+/* horizontal-scroll track — Featured + History. Native overflow-x:auto
    (trackpad, shift+wheel, touch), plus mouse-drag via js/main.js. No arrow
    buttons or dot pagination. */
 .h-scroll{
@@ -39,6 +39,25 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 }
 .h-scroll::-webkit-scrollbar{display:none;}
 .h-scroll.is-dragging{cursor:grabbing;user-select:none;}
+
+/* History pin: spacer height is a plain fixed CSS value (NOT computed by
+   JS) so the section is guaranteed to render and take up real space even if
+   the enhancement script below fails entirely — the previous pin attempt's
+   invisibility bug came from relying on JS to set this. position:sticky
+   holds .history-pin__sticky on screen for that 220vh of scroll; js/main.js
+   only adds a wheel listener that redirects vertical scroll into the
+   track's horizontal scrollLeft while pinned, releasing back to normal page
+   scroll once the track hits either end. */
+.history-pin__spacer{position:relative;height:220vh;}
+.history-pin__sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  background:var(--brand-bg);
+}
 
 /* sitewide vertical column-line overlay — 11 lines at the boundaries of a
    full-bleed 12-col grid, drawn once behind all sections so it reads as one
@@ -189,7 +208,7 @@ main{position:relative;z-index:1;}
 }
 .history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 .history__years{
-  margin-top:var(--space-10);
+  width:100%;
   gap:0;
   padding-inline:calc(100% / 12) 0;
   scroll-padding-inline-start:calc(100% / 12);
@@ -301,4 +320,8 @@ select.field__input{appearance:none;}
   .contact__row .field{grid-column:1/13 !important;}
   .contact__dividers{display:none;}
   .footer__row{flex-direction:column;align-items:center;}
+  /* touch scroll works directly on the track; the wheel-driven pin holds
+     less value here and a tall sticky spacer costs more on small screens */
+  .history-pin__spacer{height:auto;}
+  .history-pin__sticky{position:static;height:auto;}
 }
