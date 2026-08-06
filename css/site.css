@@ -99,12 +99,12 @@ main{position:relative;z-index:1;}
   display:flex;flex-direction:column;align-items:center;
   padding-block:var(--space-9);
 }
-/* center 4 of 12 page columns: hero__inner's content box is already the
-   inner 10 columns (2–11), so 40% of that = 4/12 of the full page width —
-   its edges land exactly on the existing 33.33%/66.67% vertical grid lines */
+/* 2 real page columns wide, tall portrait ratio: hero__inner's content box
+   is the inner 10 columns (2–11), so 20% of that = 2/12 of the full page
+   width — edges still land on real grid lines either side of center */
 .hero__image{
-  width:40%;
-  aspect-ratio:16/9;
+  width:20%;
+  aspect-ratio:2/3;
   border:1px solid var(--brand-line-bright);
 }
 .hero .eyebrow{margin-top:var(--space-7);margin-bottom:0;}
@@ -131,7 +131,7 @@ main{position:relative;z-index:1;}
   padding-block:var(--space-6) var(--space-2);
 }
 .card--work{flex:0 0 25vw;padding-inline:var(--space-5);}
-.card--work__image{aspect-ratio:3/4;margin-bottom:var(--space-5);}
+.card--work__image{aspect-ratio:2/3;margin-bottom:var(--space-5);}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 
@@ -218,7 +218,7 @@ main{position:relative;z-index:1;}
 
 /* ---------- portfolio bento ---------- */
 .portfolio__grid{row-gap:var(--space-9);}
-.card--project__image{aspect-ratio:4/3;margin-bottom:var(--space-5);}
+.card--project__image{aspect-ratio:2/3;margin-bottom:var(--space-5);}
 .card--project__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--project__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 
