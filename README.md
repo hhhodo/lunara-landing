@@ -1,22 +1,25 @@
-# SOOM Landing Page
+# LUNARA Landing Page
 
-전분(starch) 소재로 성형한 인센스 스틱 브랜드 SOOM의 원페이지 랜딩. 브랜드명은 영문(SOOM), 본문
-콘텐츠는 한글로 작성. (저장소/폴더명은 최초 빌드 당시 브랜드였던 `lunara-landing`을 그대로 유지 —
-아래 그리드/토큰 관련 기록은 LUNARA로 빌드하던 시점의 내용이며 구조적으로는 그대로 유효합니다.)
+전분(starch) 소재로 성형한 인센스 스틱 브랜드 LUNARA의 원페이지 랜딩. 브랜드명은 영문(LUNARA), 본문
+콘텐츠는 한글로 작성. (저장소/폴더명은 최초 빌드 당시 브랜드였던 `lunara-landing` 그대로 — 아래
+그리드/토큰 관련 기록은 그 시점 내용이며 구조적으로는 그대로 유효합니다.)
 
-## 브랜드 피벗 (LUNARA → SOOM)
+## 브랜드 피벗 (LUNARA[라이프스타일 콘텐츠 스튜디오] → SOOM[인센스] → LUNARA[인센스])
 
-라이프스타일 콘텐츠 스튜디오(LUNARA)에서 전분 인센스 스틱 브랜드(SOOM)로 전체 카피와 아이콘을
-교체했습니다. 그리드/레이아웃 구조는 그대로 두고 의미만 바꿨습니다:
-- Hero: 워드마크 LUNARA→SOOM, eyebrow "Lifestyle Content Studio"→"Starch-Based Incense Studio"
+라이프스타일 콘텐츠 스튜디오(LUNARA)에서 전분 인센스 스틱 브랜드로 전체 카피와 아이콘을 교체하며
+브랜드명도 한 차례 SOOM으로 바꿨다가, 콘텐츠/이미지/아이콘은 그대로 두고 브랜드명만 다시 LUNARA로
+되돌렸습니다. 그리드/레이아웃 구조는 처음부터 그대로 두고 의미만 바꿨습니다:
+- Hero: 워드마크 유지(LUNARA), eyebrow "Lifestyle Content Studio"→"Starch-Based Incense Studio"
 - Featured: "선택된 작업물" 5개 → 시그니처 향 컬렉션 5개(우디 시더우드 등, 연소시간 표기)
 - Philosophy: 촬영/콘텐츠 관련 니즈 카드 5개 → 인센스 구매 니즈 5개(무합성향료·저재·잔향 지속 등),
   아이콘도 카메라/아카이브 박스 등에서 잎사귀/인센스 연기/시계 나선/선물상자/향 배리에이션으로 교체
 - History: 콘텐츠 스튜디오 연혁 → 전분 성형 특허·친환경 인증 등 인센스 브랜드 연혁
-- Portfolio: "Selected Works"(광고주 작업물) → "Where to Find SOOM"(입점처/컬래버 공간)
+- Portfolio: "Selected Works"(광고주 작업물) → "Where to Find LUNARA"(입점처/컬래버 공간)
 - Contact: 카테고리를 브랜드필름/공간화보 등에서 입점문의/도매문의/협업제안으로, 예산범위 필드를
   예상 주문 수량으로 교체
-- Footer/메타 태그: 이메일·인스타그램·비즈니스 설명 전부 교체
+- Footer/메타 태그: 이메일·인스타그램·비즈니스 설명 전부 교체 (Contact@lunara.kr, @lunara.incense)
+- 실제 인센스 제품/연기 사진 13장을 히어로·Featured·Portfolio에 배치 (경쟁 브랜드 패키지가 찍힌
+  사진, 특정 실존 사찰이 나온 사진은 제외)
 
 ## 그리드 정렬 재작업 (Featured/History 가로 스크롤 트랙)
 

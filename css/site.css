@@ -1,7 +1,9 @@
-/* SOOM — brand tokens measured from Figma (node 81:2182), layered on top of styles.css.
-   Site pivoted from LUNARA (lifestyle content studio) to SOOM (starch-based
-   incense stick brand); the dark-monotone token values below are unchanged
-   from the original Figma measurement, only their meaning/usage changed.
+/* LUNARA — brand tokens measured from Figma (node 81:2182), layered on top of styles.css.
+   Content/images/icons pivoted from a lifestyle content studio to a starch-
+   based incense stick brand; the name itself pivoted to SOOM and then back
+   to LUNARA (content stayed on the incense-brand direction throughout). The
+   dark-monotone token values below are unchanged from the original Figma
+   measurement, only their meaning/usage changed.
    styles.css itself is never edited; these are new --brand-* custom properties. */
 :root{
   --brand-bg:#000;
