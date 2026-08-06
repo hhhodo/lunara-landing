@@ -201,16 +201,30 @@ main{position:relative;z-index:1;}
   margin-bottom:var(--space-6);
 }
 .history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
-/* plain .h-scroll (no pin, no wheel hijack — see the HTML comment above for
-   why). scroll-snap-type/scroll-padding still give the "탁탁" snap feel via
-   native drag/trackpad/touch scroll, with no custom JS in the loop. */
+/* pinned reveal: spacer height is a plain fixed CSS value (not JS-computed
+   — that ambiguity is what silently produced 0 height/invisibility in an
+   earlier attempt), position:sticky holds .history-pin__sticky on screen
+   for that scroll distance. Track itself is no longer a native scroll
+   container (no overflow-x/.h-scroll/scroll-snap) — its horizontal
+   position now comes entirely from the transform js/main.js applies based
+   on scroll progress (a passive scroll listener that only ever reads
+   position and sets a transform — it never calls preventDefault, so unlike
+   the earlier wheel-hijack version, it cannot block page scroll). */
+.history-pin__spacer{position:relative;height:220vh;}
+.history-pin__sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+}
 .history__years{
   width:100%;
   gap:0;
   padding-inline:calc(100% / 12) 0;
   padding-block:var(--space-7) var(--space-2);
-  scroll-snap-type:x mandatory;
-  scroll-padding-inline-start:calc(100% / 12);
+  will-change:transform;
 }
 /* 4 real page columns, expressed as % of the track's own content box (not
    vw — see the .card--work comment above for why vw drifts off the grid).
@@ -218,7 +232,6 @@ main{position:relative;z-index:1;}
    11/12 of the page — 4 columns of that = (4/12)/(11/12) = 4/11. */
 .history__year{
   flex:0 0 calc(400% / 11);
-  scroll-snap-align:start;
   border-left:1px solid var(--brand-border);
   padding-left:var(--space-6);
   padding-right:var(--space-6);
@@ -330,4 +343,10 @@ select.field__input{appearance:none;}
      less at this width anyway since columns are already very narrow */
   .card--work{flex-basis:78vw;}
   .history__year{flex-basis:82vw;}
+  /* skip the pin on small screens (js/main.js also checks this same
+     breakpoint and skips attaching the scroll listener there) — just show
+     the years as a normal overflow-x scroll strip so touch can pan it directly */
+  .history-pin__spacer{height:auto;}
+  .history-pin__sticky{position:static;height:auto;}
+  .history__years{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 }

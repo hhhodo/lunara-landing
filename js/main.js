@@ -40,40 +40,50 @@
     track.addEventListener('pointerleave', endDrag);
   });
 
-  // ---------- History: whichever year is closest to the track's left edge
-  // (its first real grid line) gets .is-active, brightening its divider
-  // white. Purely a passive readout of scrollLeft — it does NOT move the
-  // track itself. (A previous version force-scrolled to the nearest card
-  // ~140ms after scrolling stopped, which is what caused the "pauses then
-  // jumps" feel instead of moving continuously with the scroll input.) ----------
-  const historyTrack = document.querySelector('.history__years');
-  if (historyTrack) {
+  // ---------- History: pinned reveal via a PASSIVE scroll listener ----------
+  // .history-pin__spacer is a fixed-height (220vh, plain CSS) box; while it
+  // spans the viewport, .history-pin__sticky (position:sticky) holds the
+  // track on screen. This listener only ever READS scroll position
+  // (window 'scroll', passive:true) and WRITES a translateX transform to
+  // the track — it never calls preventDefault and never touches scrollLeft,
+  // so unlike the earlier wheel-hijack version it cannot block or trap page
+  // scrolling under any circumstance. Skipped below 1025px, where CSS falls
+  // back to a plain overflow-x strip (see the matching @media block).
+  const historySection = document.querySelector('.history');
+  const historySpacer = document.querySelector('.history-pin__spacer');
+  const historyTrack = document.querySelector('[data-pin-track]');
+  if (historySection && historySpacer && historyTrack && window.matchMedia('(min-width: 1025px)').matches) {
     const years = [...historyTrack.querySelectorAll('.history__year')];
-    const padding = () => parseFloat(getComputedStyle(historyTrack).paddingInlineStart) || 0;
+    const trackDistance = Math.max(0, historyTrack.scrollWidth - historyTrack.clientWidth);
 
-    const findClosest = () => {
-      const pad = padding();
+    const markActive = () => {
+      const pad = parseFloat(getComputedStyle(historyTrack).paddingInlineStart) || 0;
+      const trackLeft = historyTrack.getBoundingClientRect().left + pad;
       let closest = years[0];
       let closestDist = Infinity;
       years.forEach((year) => {
-        const dist = Math.abs((year.offsetLeft - pad) - historyTrack.scrollLeft);
+        const dist = Math.abs(year.getBoundingClientRect().left - trackLeft);
         if (dist < closestDist) { closestDist = dist; closest = year; }
       });
-      return closest;
-    };
-
-    const markActive = (year) => {
-      years.forEach((y) => y.classList.toggle('is-active', y === year));
+      years.forEach((y) => y.classList.toggle('is-active', y === closest));
     };
 
     let ticking = false;
-    historyTrack.addEventListener('scroll', () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(() => { ticking = false; markActive(findClosest()); });
-      }
+    const apply = () => {
+      ticking = false;
+      if (trackDistance <= 0) return;
+      const rect = historySpacer.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      const progress = total > 0 ? scrolled / total : 0;
+      historyTrack.style.transform = `translateX(${-progress * trackDistance}px)`;
+      markActive();
+    };
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(apply); }
     }, { passive: true });
 
-    markActive(findClosest());
+    apply();
   }
 })();

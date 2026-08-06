@@ -160,17 +160,21 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
     </div>
   </section>
 
-  <!-- About / History — pin + wheel-hijack was tried and failed 4 distinct
-       ways (invisible, wrong bg, pause-then-jump, and finally a wheel handler
-       that trapped page scroll entirely — blocking the rest of the page).
-       Not attempting it again. Plain .h-scroll: native scroll + drag +
-       CSS scroll-snap only, same reliable pattern as Featured. -->
-  <section class="section history" data-reveal>
+  <!-- About / History — pinned reveal, this time via a PASSIVE scroll listener
+       only (reads scroll position, sets a transform — never calls
+       preventDefault, so it can never block page scroll like the wheel-hijack
+       version did). Spacer height is a fixed CSS value, not JS-computed, so
+       the section always renders even if the script fails. No [data-reveal]
+       on this <section> — an ancestor's active transform breaks
+       position:sticky in most engines (confirmed twice already). -->
+  <section class="section history">
     <div class="bleed">
       <h2 class="history__title">History of<br>LUNARA</h2>
       <p class="history__body measure">2021년, 전분 성형 기술을 연구하던 두 명의 소재 연구원이 시작한 작은 실험실이 지금은 국내 최초 전분 인센스 브랜드로 자랐습니다.</p>
     </div>
-    <div class="h-scroll history__years">
+   <div class="history-pin__spacer">
+    <div class="history-pin__sticky">
+    <div class="history__years" data-pin-track>
         <div class="history__year">
           <p class="history__year-num">2026</p>
           <ul class="history__list">
@@ -214,6 +218,8 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
           </ul>
         </div>
     </div>
+    </div>
+   </div>
   </section>
 
   <!-- Portfolio bento — "함께한 공간들" (LUNARA를 만나볼 수 있는 공간). row1 3-3-4 / row2 3-3-2-2 -->
