@@ -19,23 +19,36 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 
 /* sitewide vertical column-line overlay — 11 lines at the boundaries of a
    full-bleed 12-col grid, drawn once behind all sections so it reads as one
-   continuous set of lines down the whole page rather than per-section. */
+   continuous set of lines down the whole page rather than per-section.
+   Deliberately BEHIND content (z-index 0 < main's 1): opaque section/card
+   backgrounds are meant to cover the lines where they overlap — that's the
+   look, not a bug. */
 .page{position:relative;}
-/* drawn ABOVE all section content (z-index 2 > main's 1) so opaque section
-   backgrounds (e.g. contact panel) can never paint over and hide a line */
-.page-lines{position:absolute;inset:0;pointer-events:none;z-index:2;}
+.page-lines{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  /* horizontal lines repeat every 100vh/3, so exactly 3 are visible in any
+     one screen's height as you scroll, all the way down the page */
+  background-image:repeating-linear-gradient(
+    to bottom,
+    var(--brand-line-dim) 0 1px,
+    transparent 1px calc(100vh / 3)
+  );
+}
 .page-lines span{position:absolute;top:0;bottom:0;width:1px;background:var(--brand-line-dim);}
-/* horizontal lines at the page split into thirds (1/3, 2/3 of total height) */
-.page-lines span.h{top:auto;bottom:auto;left:0;right:0;width:auto;height:1px;}
 main{position:relative;z-index:1;}
 
-/* every image placeholder site-wide gets a small white square dot at each
-   of its 4 corners — layered on top of styles.css's solid placeholder fill.
-   (background-position/-size/-repeat must be separate longhands here: mixing
-   that shorthand syntax into background-image itself is invalid and makes
-   the whole declaration get dropped.) */
-.img{
-  position:relative;
+/* every image placeholder site-wide gets a small white square dot centered
+   exactly ON each of its 4 corners (straddling the image/background edge —
+   1 of the dot's 4 quadrants sits on the image, the other 3 sit outside it).
+   A ::before 6px larger than the image on every side (inset:-3px) puts the
+   expanded box's own corners exactly on the image's real corner points, so
+   corner-flush dots on THAT box land centered on the image's corners. */
+.img{position:relative;}
+.img::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  pointer-events:none;
   background-image:
     linear-gradient(#fff,#fff),
     linear-gradient(#fff,#fff),
