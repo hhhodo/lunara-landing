@@ -10,7 +10,7 @@
   }, { threshold: 0.2 });
   revealEls.forEach((el) => io.observe(el));
 
-  // ---------- horizontal scroll tracks (Featured / Philosophy needs / History) ----------
+  // ---------- horizontal scroll tracks (Featured / History) ----------
   // Native overflow-x:auto already lets these scroll via trackpad/shift+wheel/touch;
   // this only adds mouse-drag support so a plain click-drag also pans the track.
   document.querySelectorAll('.h-scroll').forEach((track) => {
@@ -39,4 +39,29 @@
     track.addEventListener('pointercancel', endDrag);
     track.addEventListener('pointerleave', endDrag);
   });
+
+  // ---------- History: whichever year is snapped to the track's left edge
+  // (its own first grid line) gets .is-active, brightening its divider white ----------
+  const historyTrack = document.querySelector('.history__years');
+  if (historyTrack) {
+    const years = [...historyTrack.querySelectorAll('.history__year')];
+    let ticking = false;
+    const updateActive = () => {
+      ticking = false;
+      let closest = null;
+      let closestDist = Infinity;
+      years.forEach((year) => {
+        const dist = Math.abs(year.offsetLeft - historyTrack.scrollLeft);
+        if (dist < closestDist) { closestDist = dist; closest = year; }
+      });
+      years.forEach((year) => year.classList.toggle('is-active', year === closest));
+    };
+    historyTrack.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(updateActive);
+      }
+    }, { passive: true });
+    updateActive();
+  }
 })();

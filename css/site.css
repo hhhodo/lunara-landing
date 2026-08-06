@@ -118,9 +118,12 @@ main{position:relative;z-index:1;}
    growing past ~320px and let 5 cards fit entirely on wide screens with nothing
    left to scroll). flex:0 0 calc(...) with N=3.5 guarantees the 5th card always
    overflows regardless of viewport size. */
+/* left edge = exactly 1 real page column (calc(100%/12), same inset as
+   .bleed) so the track's resting-scroll-position left edge lands on the
+   true grid line instead of an arbitrary space token */
 .featured__track{
   gap:var(--space-6);
-  padding-inline:var(--space-6);
+  padding-inline:calc(100% / 12);
   padding-block:var(--space-6) var(--space-2);
 }
 .card--work{flex:0 0 calc((100% - 2.5 * var(--space-6)) / 3.5);}
@@ -128,56 +131,74 @@ main{position:relative;z-index:1;}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
 
-/* ---------- philosophy: left statement fixed, right = scroll track of dark
-   need-cards (실측 node 81:1591/1592: bg #292929, hairline top, 텍스트 20px) ---------- */
-.philosophy__row{display:flex;align-items:flex-start;gap:var(--space-8);}
-.philosophy__text{flex:0 0 auto;max-width:44%;}
+/* ---------- philosophy: local grid--10, text 1/8 (7 real cols) : cards 8/11
+   (3 real cols, true line8–line11) — card column touches real grid lines.
+   Cards (실측 node 81:1591/1592: bg #292929) stack VERTICALLY and float up
+   one at a time via the shared [data-reveal] scroll animation — no
+   horizontal drag here. Bordered + corner-dotted like an image that touches
+   a line, since the card column's left/right edges sit on real lines. ---------- */
 .philosophy__statement{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
   line-height:var(--lh-h2);
   letter-spacing:var(--display-tracking);
 }
-/* same "guaranteed overflow" sizing as Featured, ~2.5 cards visible since this
-   column only gets the remaining ~56% of the section width */
-.philosophy__needs{flex:1;gap:var(--space-4);}
+.philosophy__needs{display:flex;flex-direction:column;gap:var(--space-4);}
 .need-card{
-  flex:0 0 calc((100% - 1.5 * var(--space-4)) / 2.5);
+  position:relative;
   background:var(--brand-card-bg);
-  border-top:1px solid var(--brand-border);
+  border:1px solid var(--brand-line-bright);
   padding:var(--space-5) var(--space-6);
+}
+.need-card::before{
+  content:"";
+  position:absolute;
+  inset:-3px;
+  pointer-events:none;
+  background-image:
+    linear-gradient(#fff,#fff),
+    linear-gradient(#fff,#fff),
+    linear-gradient(#fff,#fff),
+    linear-gradient(#fff,#fff);
+  background-position:top left, top right, bottom left, bottom right;
+  background-size:6px 6px;
+  background-repeat:no-repeat;
 }
 .need-card__text{font-size:var(--fs-body-1);line-height:var(--lh-body);}
 
-/* ---------- history ---------- */
+/* ---------- history: image removed, text sized up, 2.5 cards visible at a
+   time. scroll-snap so each year "탁탁" snaps its left edge to the track's
+   first real grid line; the snapped-into-place card's divider brightens
+   to white via .is-active (toggled in js/main.js from the scroll position). ---------- */
 .history__title{
   font-size:var(--fs-display-md);
   font-weight:var(--fw-base);
   line-height:var(--lh-display);
   margin-bottom:var(--space-6);
 }
-.history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
-.history__placeholder{aspect-ratio:1/1;}
-/* single-row horizontal scroll track — the fine per-item hairlines that used
-   to sit between list rows are gone; only the left divider between year
-   columns remains */
+.history__body{font-size:var(--fs-h3);color:var(--brand-text-subtle);}
 .history__years{
   margin-top:var(--space-10);
   gap:0;
-  padding-inline:var(--space-6);
+  padding-inline:calc(100% / 12);
   padding-block:var(--space-7) var(--space-2);
+  scroll-snap-type:x mandatory;
 }
-/* container-relative (not vw-capped) so the 6th card always overflows and
-   forces a real scrollbar, regardless of viewport width — ~3.5 visible.
-   gap is 0 here (the border-left divider is the only separator), so no gap
-   term needed in the width calc. */
-.history__year{flex:0 0 calc(100% / 3.5);border-left:1px solid var(--brand-border);padding-left:var(--space-5);padding-right:var(--space-5);}
-.history__year-num{font-size:var(--fs-h1);font-weight:var(--fw-base);margin-bottom:var(--space-4);}
+.history__year{
+  flex:0 0 calc(100% / 2.5);
+  scroll-snap-align:start;
+  border-left:1px solid var(--brand-border);
+  padding-left:var(--space-6);
+  padding-right:var(--space-6);
+  transition:border-color .25s ease;
+}
+.history__year.is-active{border-left-color:var(--brand-line-bright);}
+.history__year-num{font-size:var(--fs-display-sm);font-weight:var(--fw-base);margin-bottom:var(--space-6);}
 .history__list li{
-  display:flex;gap:var(--space-3);
-  font-size:var(--fs-body-2);
+  display:flex;gap:var(--space-4);
+  font-size:var(--fs-h3);
   color:var(--brand-text-subtle);
-  padding-block:var(--space-2);
+  padding-block:var(--space-3);
 }
 .history__month{color:var(--text-default-inverse);}
 
@@ -261,9 +282,7 @@ select.field__input{appearance:none;}
 /* ---------- responsive ---------- */
 @media (max-width:1024px){
   .portfolio__grid > *{grid-column:1/11 !important;}
-  .history .grid--10 > *{grid-column:1/11 !important;}
-  .philosophy__row{flex-direction:column;}
-  .philosophy__text{max-width:none;}
+  .philosophy .grid--10 > *{grid-column:1/11 !important;}
   .contact__form{grid-column:1/13 !important;}
   .contact__row{grid-template-columns:1fr !important;}
   .contact__row .field{grid-column:1/13 !important;}
