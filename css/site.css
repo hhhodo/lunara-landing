@@ -95,6 +95,19 @@ main{position:relative;z-index:1;}
   margin-bottom:var(--space-6);
 }
 
+/* section-level title — same size/weight as History's title and Philosophy's
+   statement (fs-h2), so every section reads at one consistent "big title"
+   scale. Used where a section previously only had a small .eyebrow kicker
+   and nothing bigger (Featured, Portfolio); Hero's own eyebrow stays small
+   on purpose (it's a kicker above the wordmark, not the section title). */
+.section-title{
+  font-size:var(--fs-h2);
+  font-weight:var(--fw-base);
+  line-height:var(--lh-h2);
+  letter-spacing:var(--display-tracking);
+  margin-bottom:var(--space-6);
+}
+
 /* ---------- hero (실측 순서: image → eyebrow → wordmark) ---------- */
 .hero{padding-top:var(--space-11);text-align:center;}
 .hero__inner{
@@ -192,11 +205,28 @@ main{position:relative;z-index:1;}
   margin-bottom:var(--space-6);
 }
 .history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
+/* pinned: spacer height is a plain fixed CSS value (NOT computed by JS —
+   that's what silently ended up 0/invisible the first time this was tried),
+   position:sticky holds .history-pin__sticky on screen for that scroll
+   distance. The <section> above deliberately has no [data-reveal] — an
+   ancestor's active transform breaks position:sticky in most engines,
+   which is exactly what broke this the second time. */
+.history-pin__spacer{position:relative;height:220vh;}
+.history-pin__sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+}
 .history__years{
   width:100%;
   gap:0;
   padding-inline:calc(100% / 12) 0;
   padding-block:var(--space-7) var(--space-2);
+  scroll-snap-type:x mandatory;
+  scroll-padding-inline-start:calc(100% / 12);
 }
 /* 4 real page columns, expressed as % of the track's own content box (not
    vw — see the .card--work comment above for why vw drifts off the grid).
@@ -204,6 +234,7 @@ main{position:relative;z-index:1;}
    11/12 of the page — 4 columns of that = (4/12)/(11/12) = 4/11. */
 .history__year{
   flex:0 0 calc(400% / 11);
+  scroll-snap-align:start;
   border-left:1px solid var(--brand-border);
   padding-left:var(--space-6);
   padding-right:var(--space-6);
@@ -221,6 +252,10 @@ main{position:relative;z-index:1;}
 
 /* ---------- portfolio bento ---------- */
 .portfolio__grid{row-gap:var(--space-9);}
+/* ~50px breathing room around each card's content, matching the generous
+   framing Hero gives its image (border-block + padding-block) — Portfolio's
+   cards previously had the image flush against the card's own edge */
+.card--project{padding:var(--space-7);}
 .card--project__image{aspect-ratio:2/3;margin-bottom:var(--space-5);}
 .card--project__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--project__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
@@ -311,4 +346,8 @@ select.field__input{appearance:none;}
      less at this width anyway since columns are already very narrow */
   .card--work{flex-basis:78vw;}
   .history__year{flex-basis:82vw;}
+  /* touch already scrolls the track directly; a tall pinned spacer costs
+     more than it's worth on small screens */
+  .history-pin__spacer{height:auto;}
+  .history-pin__sticky{position:static;height:auto;}
 }

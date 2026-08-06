@@ -77,7 +77,7 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
   <!-- Featured — 시그니처 컬렉션, 가로 스크롤 5카드 (카드 폭 = 실제 그리드 3컬럼) -->
   <section class="section featured" data-reveal>
     <div class="bleed">
-      <p class="eyebrow">Signature Collection</p>
+      <p class="section-title">Signature Collection</p>
     </div>
     <div class="h-scroll featured__track">
       <article class="card card--work">
@@ -160,13 +160,17 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
     </div>
   </section>
 
-  <!-- About / History — 헤딩(고정 인트로) + 가로 스크롤 6카드(카드 폭 = 실제 그리드 4컬럼).
-       Featured와 동일한 검증된 방식(순수 h-scroll, 드래그/네이티브 스크롤). -->
-  <section class="section history" data-reveal>
+  <!-- About / History — 헤딩은 고정 인트로로 먼저 보여주고, 연혁 트랙은 화면에 고정된 채로
+       스크롤(휠)하면 좌측으로 한 칸씩 스내핑된다. 섹션 자체는 절대 data-reveal을 달지 않는다 —
+       [data-reveal]의 base transform이 조상에 있으면 position:sticky가 조용히 깨진다(과거 2회
+       재발). spacer 높이는 JS 계산이 아니라 고정 CSS 값이라 스크립트 실패해도 항상 렌더됨. -->
+  <section class="section history">
     <div class="bleed">
       <h2 class="history__title">History of<br>LUNARA</h2>
       <p class="history__body measure">2021년, 전분 성형 기술을 연구하던 두 명의 소재 연구원이 시작한 작은 실험실이 지금은 국내 최초 전분 인센스 브랜드로 자랐습니다.</p>
     </div>
+   <div class="history-pin__spacer">
+    <div class="history-pin__sticky">
     <div class="h-scroll history__years">
         <div class="history__year">
           <p class="history__year-num">2026</p>
@@ -211,48 +215,50 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
           </ul>
         </div>
     </div>
+    </div>
+   </div>
   </section>
 
   <!-- Portfolio bento — "함께한 공간들" (LUNARA를 만나볼 수 있는 공간). row1 3-3-4 / row2 3-3-2-2 -->
   <section class="section portfolio" data-reveal>
     <div class="bleed">
-      <p class="eyebrow">Where to Find LUNARA</p>
+      <p class="section-title">Where to Find LUNARA</p>
       <div class="grid grid--flush grid--10 portfolio__grid">
         <article class="card card--project" style="grid-column:1/4">
           <div class="img card--project__image" style="background-image:url('assets/images/roya-hsu-hBXMdJinMcQ-unsplash.jpg')"></div>
-          <p class="card--project__title">쇼룸 화보</p>
-          <p class="card--project__meta">Retail<br>Client. LUNARA Seongsu</p>
+          <p class="card--project__title">성수 쇼룸</p>
+          <p class="card--project__meta">플래그십 스토어<br>서울 성수동</p>
         </article>
         <article class="card card--project" style="grid-column:4/7">
           <div class="img card--project__image" style="background-image:url('assets/images/eric-mok-5Sab95Rsb5Q-unsplash.jpg')"></div>
-          <p class="card--project__title">조용한 서점 카페</p>
-          <p class="card--project__meta">Collaboration<br>Client. Zonto Books</p>
+          <p class="card--project__title">정도서점</p>
+          <p class="card--project__meta">스토키스트<br>독립서점 컬래버레이션</p>
         </article>
         <article class="card card--project" style="grid-column:7/11">
           <div class="img card--project__image" style="background-image:url('assets/images/petr-sidorov-Py3kK2wVYoM-unsplash.jpg')"></div>
           <p class="card--project__title">리추얼 무드필름</p>
-          <p class="card--project__meta">Film<br>Client. LUNARA Studio</p>
+          <p class="card--project__meta">브랜드 필름<br>LUNARA 자체 제작</p>
         </article>
 
         <article class="card card--project" style="grid-column:1/4">
           <div class="img card--project__image" style="background-image:url('assets/images/lukasz-rawa-skv86EQySIY-unsplash.jpg')"></div>
-          <p class="card--project__title">요가 스튜디오 향 큐레이션</p>
-          <p class="card--project__meta">Curation<br>Client. Still Yoga</p>
+          <p class="card--project__title">스틸요가 스튜디오</p>
+          <p class="card--project__meta">향 큐레이션<br>수업 공간 상주 디퓨징</p>
         </article>
         <article class="card card--project" style="grid-column:4/7">
           <div class="img card--project__image" style="background-image:url('assets/images/ankit-karnany-fZannbHqimQ-unsplash.jpg')"></div>
-          <p class="card--project__title">호텔 룸 어메니티</p>
-          <p class="card--project__meta">Amenity<br>Client. Hotel Nuun</p>
+          <p class="card--project__title">호텔 누운</p>
+          <p class="card--project__meta">룸 어메니티<br>체크인 시 시그니처 향 제공</p>
         </article>
         <article class="card card--project" style="grid-column:7/9">
           <div class="img card--project__image" style="background-image:url('assets/images/david-brooke-martin-FD9jL29KD5E-unsplash.jpg')"></div>
-          <p class="card--project__title">편집숍 입점 화보</p>
-          <p class="card--project__meta">Retail<br>Client. Object Seoul</p>
+          <p class="card--project__title">오브제서울</p>
+          <p class="card--project__meta">편집숍 입점<br>서울 한남동</p>
         </article>
         <article class="card card--project" style="grid-column:9/11">
           <div class="img card--project__image" style="background-image:url('assets/images/jocelyn-morales-jt1qjLFsFYg-unsplash.jpg')"></div>
-          <p class="card--project__title">명상 앱 콜라보</p>
-          <p class="card--project__meta">Collaboration<br>Client. Calm Space</p>
+          <p class="card--project__title">마음공간</p>
+          <p class="card--project__meta">명상 앱 컬래보레이션<br>세션 전용 향 개발</p>
         </article>
       </div>
     </div>
