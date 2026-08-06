@@ -40,51 +40,67 @@
     track.addEventListener('pointerleave', endDrag);
   });
 
-  // ---------- History: each year snaps its left edge to the track's first
-  // real grid line (skipping column 1), one at a time, and whichever year is
-  // currently snapped there gets .is-active (brightens its divider white).
-  // CSS scroll-snap is set too, but a custom pointer-drag that writes
-  // scrollLeft directly isn't reliably treated as a native "scroll gesture"
-  // by every browser's snap machinery — so the actual snap-into-place motion
-  // is forced here explicitly once scrolling settles, instead of trusting
-  // CSS snap alone to produce the "탁탁" magnetic feel. ----------
-  const historyTrack = document.querySelector('.history__years');
+  // ---------- pinned horizontal reveal: Philosophy needs / History years ----------
+  // The section (.pin-scroll) stays on screen via position:sticky inside a tall
+  // spacer for exactly the vertical distance needed to horizontally reveal every
+  // card in [data-pin-track]; page scroll progress through that spacer maps
+  // directly to translateX on the track, so all content becomes visible before
+  // the page is allowed to continue past the section.
+  const initPinScroll = (section) => {
+    const spacer = section.querySelector('.pin-scroll__spacer');
+    const sticky = section.querySelector('.pin-scroll__sticky');
+    const track = section.querySelector('[data-pin-track]');
+    if (!spacer || !sticky || !track) return;
+
+    let trackDistance = 0;
+
+    const measure = () => {
+      trackDistance = Math.max(0, track.scrollWidth - track.clientWidth);
+      spacer.style.height = `${window.innerHeight + trackDistance}px`;
+    };
+
+    const apply = () => {
+      if (trackDistance <= 0) { track.style.transform = ''; return; }
+      const rect = spacer.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      const scrolled = Math.min(Math.max(-rect.top, 0), total);
+      const progress = total > 0 ? scrolled / total : 0;
+      track.style.transform = `translateX(${-progress * trackDistance}px)`;
+      return progress;
+    };
+
+    measure();
+    window.addEventListener('resize', () => { measure(); apply(); });
+    window.addEventListener('scroll', () => requestAnimationFrame(apply), { passive: true });
+    apply();
+
+    return { apply, get trackDistance() { return trackDistance; } };
+  };
+
+  document.querySelectorAll('.pin-scroll').forEach((section) => initPinScroll(section));
+
+  // ---------- History: whichever year currently sits at the track's own left
+  // edge (its leading grid inset) gets .is-active, brightening its divider
+  // white. getBoundingClientRect() already reflects the translateX applied by
+  // initPinScroll above, so comparing on-screen rects directly (no separate
+  // scroll container or transform-parsing needed). ----------
+  const historyTrack = document.querySelector('.history .pin-scroll [data-pin-track]');
   if (historyTrack) {
     const years = [...historyTrack.querySelectorAll('.history__year')];
-    const padding = () => parseFloat(getComputedStyle(historyTrack).paddingInlineStart) || 0;
-
-    const findClosest = () => {
-      const pad = padding();
+    const markActive = () => {
+      // reference point = the track's own leading inset (true grid line 1),
+      // not its raw border-box edge, which sits one column further left
+      const pad = parseFloat(getComputedStyle(historyTrack).paddingInlineStart) || 0;
+      const lineOne = historyTrack.getBoundingClientRect().left + pad;
       let closest = years[0];
       let closestDist = Infinity;
       years.forEach((year) => {
-        const dist = Math.abs((year.offsetLeft - pad) - historyTrack.scrollLeft);
+        const dist = Math.abs(year.getBoundingClientRect().left - lineOne);
         if (dist < closestDist) { closestDist = dist; closest = year; }
       });
-      return closest;
+      years.forEach((y) => y.classList.toggle('is-active', y === closest));
     };
-
-    const markActive = (year) => {
-      years.forEach((y) => y.classList.toggle('is-active', y === year));
-    };
-
-    const snapTo = (year) => {
-      const max = historyTrack.scrollWidth - historyTrack.clientWidth;
-      const target = Math.max(0, Math.min(year.offsetLeft - padding(), max));
-      historyTrack.scrollTo({ left: target, behavior: 'smooth' });
-    };
-
-    let ticking = false;
-    let settleTimer = null;
-    historyTrack.addEventListener('scroll', () => {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(() => { ticking = false; markActive(findClosest()); });
-      }
-      clearTimeout(settleTimer);
-      settleTimer = setTimeout(() => snapTo(findClosest()), 140);
-    }, { passive: true });
-
-    markActive(findClosest());
+    window.addEventListener('scroll', () => requestAnimationFrame(markActive), { passive: true });
+    markActive();
   }
 })();

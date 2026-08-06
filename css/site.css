@@ -27,9 +27,9 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
    true line k, since the box itself starts flush at true line 1). */
 .grid--10{grid-template-columns:repeat(10,1fr);}
 
-/* horizontal-scroll track shared by Featured / Philosophy needs / History —
-   native overflow-x:auto (trackpad, shift+wheel, touch), plus mouse-drag via
-   js/main.js. No arrow buttons or dot pagination. */
+/* horizontal-scroll track — Featured only. Native overflow-x:auto
+   (trackpad, shift+wheel, touch), plus mouse-drag via js/main.js. No arrow
+   buttons or dot pagination. */
 .h-scroll{
   display:flex;
   overflow-x:auto;
@@ -39,6 +39,23 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 }
 .h-scroll::-webkit-scrollbar{display:none;}
 .h-scroll.is-dragging{cursor:grabbing;user-select:none;}
+
+/* pinned horizontal-reveal — Philosophy needs / History years. The section
+   stays fixed on screen (position:sticky inside a tall spacer) for the
+   entire vertical scroll distance needed to horizontally reveal every card
+   in [data-pin-track] (translateX driven by scroll progress, js/main.js
+   initPinScroll) — the page only continues past the section once the whole
+   track has scrolled into view. */
+.pin-scroll__spacer{position:relative;}
+.pin-scroll__sticky{
+  position:sticky;
+  top:0;
+  height:100vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+}
+[data-pin-track]{display:flex;will-change:transform;}
 
 /* sitewide vertical column-line overlay — 11 lines at the boundaries of a
    full-bleed 12-col grid, drawn once behind all sections so it reads as one
@@ -174,9 +191,11 @@ main{position:relative;z-index:1;}
 /* ---------- history: image removed, title now matches Philosophy's statement
    size (fs-h2) instead of the much-bigger display-md that made the top of
    the section and the bottom (연혁, kept as-is) look flat/same-weight.
-   scroll-snap-align + a matching scroll-padding (not just visual padding)
-   so every snapped year's left edge lands on the SAME real grid line —
-   true line 1, i.e. skipping column 1 — every time, not just at rest. ---------- */
+   The years track itself is pinned/reveal-scrolled (see .pin-scroll rules
+   above + initPinScroll in js/main.js) — leading padding-inline is the same
+   1-column inset as everywhere else, so the first (and, once "snapped" by
+   the js active-line logic, every subsequent) year's left edge lines up
+   with the same true grid line — skipping column 1. ---------- */
 .history__title{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
@@ -186,17 +205,11 @@ main{position:relative;z-index:1;}
 }
 .history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 .history__years{
-  margin-top:var(--space-10);
   gap:0;
-  padding-inline:calc(100% / 12);
-  scroll-padding-inline-start:calc(100% / 12);
-  padding-block:var(--space-7) var(--space-2);
-  scroll-snap-type:x mandatory;
-  scroll-behavior:smooth;
+  padding-inline:calc(100% / 12) 0;
 }
 .history__year{
   flex:0 0 calc(100% / 2.5);
-  scroll-snap-align:start;
   border-left:1px solid var(--brand-border);
   padding-left:var(--space-6);
   padding-right:var(--space-6);
