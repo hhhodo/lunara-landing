@@ -40,13 +40,12 @@
     track.addEventListener('pointerleave', endDrag);
   });
 
-  // ---------- History: whichever year is snapped to the track's left edge
+  // ---------- History: whichever year is closest to the track's left edge
   // (its first real grid line) gets .is-active, brightening its divider
-  // white. CSS scroll-snap handles the actual "탁탁" magnetic feel; this
-  // just tracks which card ends up there and also force-corrects the final
-  // rest position after scrolling settles, since a custom pointer-drag that
-  // writes scrollLeft directly isn't always treated as a native "scroll
-  // gesture" by every browser's snap engine. ----------
+  // white. Purely a passive readout of scrollLeft — it does NOT move the
+  // track itself. (A previous version force-scrolled to the nearest card
+  // ~140ms after scrolling stopped, which is what caused the "pauses then
+  // jumps" feel instead of moving continuously with the scroll input.) ----------
   const historyTrack = document.querySelector('.history__years');
   if (historyTrack) {
     const years = [...historyTrack.querySelectorAll('.history__year')];
@@ -67,21 +66,12 @@
       years.forEach((y) => y.classList.toggle('is-active', y === year));
     };
 
-    const snapTo = (year) => {
-      const max = historyTrack.scrollWidth - historyTrack.clientWidth;
-      const target = Math.max(0, Math.min(year.offsetLeft - padding(), max));
-      historyTrack.scrollTo({ left: target, behavior: 'smooth' });
-    };
-
     let ticking = false;
-    let settleTimer = null;
     historyTrack.addEventListener('scroll', () => {
       if (!ticking) {
         ticking = true;
         requestAnimationFrame(() => { ticking = false; markActive(findClosest()); });
       }
-      clearTimeout(settleTimer);
-      settleTimer = setTimeout(() => snapTo(findClosest()), 140);
     }, { passive: true });
 
     markActive(findClosest());
@@ -90,12 +80,10 @@
   // ---------- History pin: while the section is stuck on screen
   // (.history-pin__spacer is CSS position:sticky — see site.css, height is
   // a fixed 220vh so this doesn't depend on any JS measurement to be
-  // visible), redirect vertical wheel/trackpad scroll into the track's
-  // horizontal scrollLeft instead of the page. Once the track has reached
-  // either end, stop intercepting so the page scrolls normally past the
-  // section — this is what makes it feel like scrolling "auto-advances"
-  // the cards while the section holds in place, on top of the manual
-  // drag/native-scroll that already works on the track directly. ----------
+  // visible), redirect vertical wheel/trackpad scroll 1:1 into the track's
+  // horizontal scrollLeft instead of the page — moves continuously with the
+  // scroll input, no snapping/delay. Once the track has reached either end,
+  // stop intercepting so the page scrolls normally past the section. ----------
   const historySpacer = document.querySelector('.history-pin__spacer');
   if (historyTrack && historySpacer) {
     historySpacer.addEventListener('wheel', (e) => {

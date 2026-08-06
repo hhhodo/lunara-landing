@@ -59,7 +59,6 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
   display:flex;
   align-items:center;
   overflow:hidden;
-  background:var(--brand-bg);
 }
 
 /* sitewide vertical column-line overlay — 11 lines at the boundaries of a
@@ -196,12 +195,13 @@ main{position:relative;z-index:1;}
 /* ---------- history: image removed, title now matches Philosophy's statement
    size (fs-h2) instead of the much-bigger display-md that made the top of
    the section and the bottom (연혁, kept as-is) look flat/same-weight.
-   Pin-scroll was tried 3 times (including ending up fully invisible) and
-   abandoned — back to the same proven .h-scroll + native scroll-snap
-   pattern as Featured. Leading padding-inline is still the 1-column grid
-   inset, and scroll-padding-inline-start matches it so every snapped
-   year's left edge lands on the same true grid line (skipping column 1),
-   not just at rest. ---------- */
+   Track is .h-scroll (drag/native scroll all work) wrapped in a pin
+   (.history-pin__*, see above) whose wheel listener moves scrollLeft
+   directly/continuously — no scroll-snap here anymore, since CSS snap
+   fighting the wheel handler was exactly what caused the "pauses then
+   jumps" feel. Leading padding-inline is still the 1-column grid inset, so
+   the first year's left edge lines up with the true grid line (skipping
+   column 1). ---------- */
 .history__title{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
@@ -214,13 +214,10 @@ main{position:relative;z-index:1;}
   width:100%;
   gap:0;
   padding-inline:calc(100% / 12) 0;
-  scroll-padding-inline-start:calc(100% / 12);
   padding-block:var(--space-7) var(--space-2);
-  scroll-snap-type:x mandatory;
 }
 .history__year{
   flex:0 0 calc(100% / 2.5);
-  scroll-snap-align:start;
   border-left:1px solid var(--brand-border);
   padding-left:var(--space-6);
   padding-right:var(--space-6);
