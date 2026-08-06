@@ -157,17 +157,15 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
     </div>
   </section>
 
-  <!-- About / History — 헤딩은 고정 인트로로 먼저 보여주고, 연혁 트랙은 섹션이 화면에
-       고정된 채로 스크롤 진행률만큼 가로 이동해 6개년을 전부 보여준다(js initPinScroll).
-       스냅된(트랙이 멈췄을 때 좌측에 가장 가까운) 연혁의 좌측 라인만 흰색으로 표시. -->
-  <section class="section history pin-scroll">
+  <!-- About / History — 핀 스크롤 3연속 실패(안 보임 포함) 후 Featured와 동일한 검증된
+       방식(가로 스크롤 + native scroll-snap)으로 되돌림. 화면 고정 효과는 포기하고
+       "확실히 보이고 확실히 동작하는" 걸 우선. 스냅된 연혁의 좌측 라인만 흰색(js). -->
+  <section class="section history" data-reveal>
     <div class="bleed">
       <h2 class="history__title">History of<br>LUNARA</h2>
       <p class="history__body measure">2021년, 세 명의 에디터가 모여 시작한 작은 기록 프로젝트가 지금은 라이프스타일 브랜드와 공간을 위한 콘텐츠 스튜디오로 자랐습니다.</p>
     </div>
-   <div class="pin-scroll__spacer">
-    <div class="pin-scroll__sticky">
-    <div class="history__years" data-pin-track>
+    <div class="h-scroll history__years">
         <div class="history__year">
           <p class="history__year-num">2026</p>
           <ul class="history__list">
@@ -211,8 +209,6 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
           </ul>
         </div>
     </div>
-    </div>
-   </div>
   </section>
 
   <!-- Portfolio bento — row1 3-3-6 / row2 3-3-3-3 -->

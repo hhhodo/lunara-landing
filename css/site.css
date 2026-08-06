@@ -40,31 +40,6 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .h-scroll::-webkit-scrollbar{display:none;}
 .h-scroll.is-dragging{cursor:grabbing;user-select:none;}
 
-/* pinned horizontal-reveal — History years only (Philosophy went back to a
-   plain vertical stack, see below). Deliberately NOT position:sticky: an
-   ancestor with an active `transform` (e.g. this project's [data-reveal]
-   fade/rise-in, which WAS on this section) creates a new containing block
-   and silently breaks sticky/fixed descendants in most engines — that's
-   why the pin never visually held and the background behind kept
-   "scrolling through". Section's data-reveal was removed and the pin itself
-   is done manually in js/main.js (toggling position:fixed/absolute + top
-   based on scroll position), which has no such containing-block gotcha.
-   Opaque background so the page's own scrolling background (page-lines
-   etc.) can't show through while pinned. */
-.pin-scroll__spacer{position:relative;}
-.pin-scroll__sticky{
-  position:absolute;
-  top:0;
-  left:0;
-  width:100%;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  overflow:hidden;
-  background:var(--brand-bg);
-}
-[data-pin-track]{display:flex;will-change:transform;}
-
 /* sitewide vertical column-line overlay — 11 lines at the boundaries of a
    full-bleed 12-col grid, drawn once behind all sections so it reads as one
    continuous set of lines down the whole page rather than per-section.
@@ -199,12 +174,12 @@ main{position:relative;z-index:1;}
 /* ---------- history: image removed, title now matches Philosophy's statement
    size (fs-h2) instead of the much-bigger display-md that made the top of
    the section and the bottom (연혁, kept as-is) look flat/same-weight.
-   Original spacing (margin-top/padding-block) restored — an earlier pass
-   dropped these by mistake. The years track is pinned (see .pin-scroll
-   rules + initPinScroll in js/main.js) and advances ONE card per discrete
-   scroll step (not continuous 1:1 translateX) — leading padding-inline is
-   the same 1-column inset as everywhere else, so every snapped year's left
-   edge lands on the same true grid line, skipping column 1. ---------- */
+   Pin-scroll was tried 3 times (including ending up fully invisible) and
+   abandoned — back to the same proven .h-scroll + native scroll-snap
+   pattern as Featured. Leading padding-inline is still the 1-column grid
+   inset, and scroll-padding-inline-start matches it so every snapped
+   year's left edge lands on the same true grid line (skipping column 1),
+   not just at rest. ---------- */
 .history__title{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
@@ -217,11 +192,13 @@ main{position:relative;z-index:1;}
   margin-top:var(--space-10);
   gap:0;
   padding-inline:calc(100% / 12) 0;
+  scroll-padding-inline-start:calc(100% / 12);
   padding-block:var(--space-7) var(--space-2);
-  transition:transform .5s cubic-bezier(.22,.8,.36,1);
+  scroll-snap-type:x mandatory;
 }
 .history__year{
   flex:0 0 calc(100% / 2.5);
+  scroll-snap-align:start;
   border-left:1px solid var(--brand-border);
   padding-left:var(--space-6);
   padding-right:var(--space-6);

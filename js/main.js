@@ -40,75 +40,50 @@
     track.addEventListener('pointerleave', endDrag);
   });
 
-  // ---------- History: pinned, ONE-CARD-PER-STEP reveal ----------
-  // Manual pin instead of position:sticky (see the CSS comment on
-  // .pin-scroll__sticky for why: an ancestor transform silently breaks
-  // sticky/fixed descendants, which is what was happening here). While the
-  // spacer spans the viewport, .pin-scroll__sticky is switched to
-  // position:fixed so it visually holds in place; before/after that range
-  // it's pinned to the spacer's own top/bottom via position:absolute so it
-  // scrolls normally into and out of view like anything else.
-  //
-  // Extra scroll length is sized off the track's actual overflow (like a
-  // normal horizontal scroller would need), not an arbitrary per-card
-  // multiplier — six ~2.5-visible cards previously produced 600vh of mostly
-  // empty scrolling. Progress through that distance is quantized to one
-  // discrete step per card: the track's transform only changes (via its own
-  // CSS transition, for the "탁탁" snap) when the step actually advances.
-  const historySection = document.querySelector('.history.pin-scroll');
-  if (historySection) {
-    const spacer = historySection.querySelector('.pin-scroll__spacer');
-    const sticky = historySection.querySelector('.pin-scroll__sticky');
-    const track = historySection.querySelector('[data-pin-track]');
-    const years = [...track.querySelectorAll('.history__year')];
-    let lastStep = -1;
-    let trackDistance = 0;
+  // ---------- History: whichever year is snapped to the track's left edge
+  // (its first real grid line) gets .is-active, brightening its divider
+  // white. CSS scroll-snap handles the actual "탁탁" magnetic feel; this
+  // just tracks which card ends up there and also force-corrects the final
+  // rest position after scrolling settles, since a custom pointer-drag that
+  // writes scrollLeft directly isn't always treated as a native "scroll
+  // gesture" by every browser's snap engine. ----------
+  const historyTrack = document.querySelector('.history__years');
+  if (historyTrack) {
+    const years = [...historyTrack.querySelectorAll('.history__year')];
+    const padding = () => parseFloat(getComputedStyle(historyTrack).paddingInlineStart) || 0;
 
-    const padding = () => parseFloat(getComputedStyle(track).paddingInlineStart) || 0;
-
-    const goToStep = (i) => {
-      if (i === lastStep) return;
-      lastStep = i;
+    const findClosest = () => {
       const pad = padding();
-      const max = Math.max(0, track.scrollWidth - track.clientWidth);
-      const target = Math.max(0, Math.min(years[i].offsetLeft - pad, max));
-      track.style.transform = `translateX(${-target}px)`;
-      years.forEach((y, idx) => y.classList.toggle('is-active', idx === i));
+      let closest = years[0];
+      let closestDist = Infinity;
+      years.forEach((year) => {
+        const dist = Math.abs((year.offsetLeft - pad) - historyTrack.scrollLeft);
+        if (dist < closestDist) { closestDist = dist; closest = year; }
+      });
+      return closest;
     };
 
-    const measure = () => {
-      trackDistance = Math.max(0, track.scrollWidth - track.clientWidth);
-      spacer.style.height = `${window.innerHeight + trackDistance}px`;
+    const markActive = (year) => {
+      years.forEach((y) => y.classList.toggle('is-active', y === year));
     };
 
-    const updatePin = (rect, vh) => {
-      if (rect.top > 0) {
-        sticky.style.position = 'absolute';
-        sticky.style.top = '0px';
-      } else if (rect.bottom < vh) {
-        sticky.style.position = 'absolute';
-        sticky.style.top = `${spacer.offsetHeight - vh}px`;
-      } else {
-        sticky.style.position = 'fixed';
-        sticky.style.top = '0px';
+    const snapTo = (year) => {
+      const max = historyTrack.scrollWidth - historyTrack.clientWidth;
+      const target = Math.max(0, Math.min(year.offsetLeft - padding(), max));
+      historyTrack.scrollTo({ left: target, behavior: 'smooth' });
+    };
+
+    let ticking = false;
+    let settleTimer = null;
+    historyTrack.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => { ticking = false; markActive(findClosest()); });
       }
-    };
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => snapTo(findClosest()), 140);
+    }, { passive: true });
 
-    const apply = () => {
-      const vh = window.innerHeight;
-      const rect = spacer.getBoundingClientRect();
-      updatePin(rect, vh);
-      const total = rect.height - vh;
-      const scrolled = Math.min(Math.max(-rect.top, 0), total);
-      const progress = total > 0 ? scrolled / total : 0;
-      const step = Math.round(progress * (years.length - 1));
-      goToStep(step);
-    };
-
-    measure();
-    goToStep(0);
-    apply();
-    window.addEventListener('resize', () => { measure(); lastStep = -1; apply(); });
-    window.addEventListener('scroll', () => requestAnimationFrame(apply), { passive: true });
+    markActive(findClosest());
   }
 })();
