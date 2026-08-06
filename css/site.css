@@ -4,7 +4,9 @@
   --brand-bg:#000;
   --brand-bg-raised:#000; /* flattened to pure black per request — no lighter panels */
   --brand-border:rgba(255,255,255,.14); /* measured hairline #2b2b2b on #1d1d1d */
-  --brand-line:#575757; /* measured form input underline, reused for grid lines */
+  --brand-line:#575757; /* measured form input underline */
+  --brand-line-dim:#3a3a3a; /* page grid lines — one tone down from --brand-line, too bright as-is */
+  --brand-line-bright:#fff; /* bright edge where an element meets a grid line */
   --brand-text-subtle:rgba(255,255,255,.5); /* measured eyebrow color */
 }
 
@@ -20,7 +22,9 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
    continuous set of lines down the whole page rather than per-section. */
 .page{position:relative;}
 .page-lines{position:absolute;inset:0;pointer-events:none;z-index:0;}
-.page-lines span{position:absolute;top:0;bottom:0;width:1px;background:var(--brand-line);}
+.page-lines span{position:absolute;top:0;bottom:0;width:1px;background:var(--brand-line-dim);}
+/* horizontal lines at the page split into thirds (1/3, 2/3 of total height) */
+.page-lines span.h{top:auto;bottom:auto;left:0;right:0;width:auto;height:1px;}
 main{position:relative;z-index:1;}
 
 .eyebrow{
@@ -38,7 +42,23 @@ main{position:relative;z-index:1;}
   border-block:1px solid var(--brand-border);
   padding-block:var(--space-9);
 }
-.hero__image{aspect-ratio:16/9;max-width:920px;}
+/* full width of the 10-col content box so its left/right edges land exactly
+   on the page grid lines (scales naturally at any viewport, incl. 2560) */
+.hero__image{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  border:1px solid var(--brand-line-bright);
+}
+.hero__image .corner-dot{
+  position:absolute;
+  width:6px;height:6px;
+  background:#fff;
+}
+.hero__image .corner-dot--tl{top:-3px;left:-3px;}
+.hero__image .corner-dot--tr{top:-3px;right:-3px;}
+.hero__image .corner-dot--bl{bottom:-3px;left:-3px;}
+.hero__image .corner-dot--br{bottom:-3px;right:-3px;}
 .hero .eyebrow{margin-top:var(--space-7);margin-bottom:0;}
 .hero__wordmark{
   margin-top:var(--space-5);

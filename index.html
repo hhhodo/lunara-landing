@@ -54,6 +54,8 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
     <span style="left:75%"></span>
     <span style="left:83.3333%"></span>
     <span style="left:91.6667%"></span>
+    <span class="h" style="top:33.3333%"></span>
+    <span class="h" style="top:66.6667%"></span>
   </div>
 
 <main>
@@ -61,7 +63,12 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
   <!-- Hero: image → eyebrow → wordmark (실측 순서) -->
   <section class="section hero" data-reveal>
     <div class="bleed hero__inner">
-      <div class="img hero__image" aria-hidden="true"></div>
+      <div class="img hero__image" aria-hidden="true">
+        <span class="corner-dot corner-dot--tl"></span>
+        <span class="corner-dot corner-dot--tr"></span>
+        <span class="corner-dot corner-dot--bl"></span>
+        <span class="corner-dot corner-dot--br"></span>
+      </div>
       <p class="eyebrow">Lifestyle Content Studio</p>
       <h1 class="hero__wordmark">LUNARA</h1>
     </div>
