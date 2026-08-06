@@ -40,28 +40,51 @@
     track.addEventListener('pointerleave', endDrag);
   });
 
-  // ---------- History: whichever year is snapped to the track's left edge
-  // (its own first grid line) gets .is-active, brightening its divider white ----------
+  // ---------- History: each year snaps its left edge to the track's first
+  // real grid line (skipping column 1), one at a time, and whichever year is
+  // currently snapped there gets .is-active (brightens its divider white).
+  // CSS scroll-snap is set too, but a custom pointer-drag that writes
+  // scrollLeft directly isn't reliably treated as a native "scroll gesture"
+  // by every browser's snap machinery — so the actual snap-into-place motion
+  // is forced here explicitly once scrolling settles, instead of trusting
+  // CSS snap alone to produce the "탁탁" magnetic feel. ----------
   const historyTrack = document.querySelector('.history__years');
   if (historyTrack) {
     const years = [...historyTrack.querySelectorAll('.history__year')];
-    let ticking = false;
-    const updateActive = () => {
-      ticking = false;
-      let closest = null;
+    const padding = () => parseFloat(getComputedStyle(historyTrack).paddingInlineStart) || 0;
+
+    const findClosest = () => {
+      const pad = padding();
+      let closest = years[0];
       let closestDist = Infinity;
       years.forEach((year) => {
-        const dist = Math.abs(year.offsetLeft - historyTrack.scrollLeft);
+        const dist = Math.abs((year.offsetLeft - pad) - historyTrack.scrollLeft);
         if (dist < closestDist) { closestDist = dist; closest = year; }
       });
-      years.forEach((year) => year.classList.toggle('is-active', year === closest));
+      return closest;
     };
+
+    const markActive = (year) => {
+      years.forEach((y) => y.classList.toggle('is-active', y === year));
+    };
+
+    const snapTo = (year) => {
+      const max = historyTrack.scrollWidth - historyTrack.clientWidth;
+      const target = Math.max(0, Math.min(year.offsetLeft - padding(), max));
+      historyTrack.scrollTo({ left: target, behavior: 'smooth' });
+    };
+
+    let ticking = false;
+    let settleTimer = null;
     historyTrack.addEventListener('scroll', () => {
       if (!ticking) {
         ticking = true;
-        requestAnimationFrame(updateActive);
+        requestAnimationFrame(() => { ticking = false; markActive(findClosest()); });
       }
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => snapTo(findClosest()), 140);
     }, { passive: true });
-    updateActive();
+
+    markActive(findClosest());
   }
 })();

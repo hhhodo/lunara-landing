@@ -6,7 +6,7 @@
   --brand-border:rgba(255,255,255,.14); /* measured hairline #2b2b2b on #1d1d1d */
   --brand-line:#575757; /* measured form input underline */
   --brand-line-dim:#3a3a3a; /* page grid lines — one tone down from --brand-line, too bright as-is */
-  --brand-line-bright:#fff; /* bright edge where an element meets a grid line */
+  --brand-line-bright:rgba(255,255,255,.55); /* edge where an element meets a grid line — toned down from solid white, was too loud */
   --brand-card-bg:#292929; /* measured need-card background (node 81:1592) */
   --brand-text-subtle:rgba(255,255,255,.5); /* measured eyebrow color */
 }
@@ -129,26 +129,30 @@ main{position:relative;z-index:1;}
 .card--work{flex:0 0 calc((100% - 2.5 * var(--space-6)) / 3.5);}
 .card--work__image{aspect-ratio:3/4;margin-bottom:var(--space-5);}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
-.card--work__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
+.card--work__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 
-/* ---------- philosophy: local grid--10, text 1/8 (7 real cols) : cards 8/11
-   (3 real cols, true line8–line11) — card column touches real grid lines.
-   Cards (실측 node 81:1591/1592: bg #292929) stack VERTICALLY and float up
-   one at a time via the shared [data-reveal] scroll animation — no
-   horizontal drag here. Bordered + corner-dotted like an image that touches
-   a line, since the card column's left/right edges sit on real lines. ---------- */
+/* ---------- philosophy: left statement is a plain flex sibling (never moves —
+   only its sibling's OWN overflow-x scrolls, no sticky needed). Right needs
+   track sized directly off the viewport (33.333vw = 4 of the site's 12 grid
+   columns) rather than a fraction of the (smaller) track box, per request to
+   size them "off 4 grid columns" instead of the previous cramped 3-column
+   local-grid box. Bordered + corner-dotted like any element that visually
+   reads as touching a grid unit; icon added above the copy in each card. ---------- */
+.philosophy__layout{display:flex;align-items:flex-start;gap:var(--space-8);}
+.philosophy__text{flex:0 0 auto;max-width:40%;}
 .philosophy__statement{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
   line-height:var(--lh-h2);
   letter-spacing:var(--display-tracking);
 }
-.philosophy__needs{display:flex;flex-direction:column;gap:var(--space-4);}
+.philosophy__needs{flex:1;gap:var(--space-4);padding-block:var(--space-2);}
 .need-card{
   position:relative;
+  flex:0 0 33.333vw;
   background:var(--brand-card-bg);
   border:1px solid var(--brand-line-bright);
-  padding:var(--space-5) var(--space-6);
+  padding:var(--space-6) var(--space-7);
 }
 .need-card::before{
   content:"";
@@ -164,25 +168,31 @@ main{position:relative;z-index:1;}
   background-size:6px 6px;
   background-repeat:no-repeat;
 }
-.need-card__text{font-size:var(--fs-body-1);line-height:var(--lh-body);}
+.need-card__icon{width:36px;height:36px;color:var(--text-default-inverse);margin-bottom:var(--space-5);}
+.need-card__text{font-size:var(--fs-h3);line-height:var(--lh-body);}
 
-/* ---------- history: image removed, text sized up, 2.5 cards visible at a
-   time. scroll-snap so each year "탁탁" snaps its left edge to the track's
-   first real grid line; the snapped-into-place card's divider brightens
-   to white via .is-active (toggled in js/main.js from the scroll position). ---------- */
+/* ---------- history: image removed, title now matches Philosophy's statement
+   size (fs-h2) instead of the much-bigger display-md that made the top of
+   the section and the bottom (연혁, kept as-is) look flat/same-weight.
+   scroll-snap-align + a matching scroll-padding (not just visual padding)
+   so every snapped year's left edge lands on the SAME real grid line —
+   true line 1, i.e. skipping column 1 — every time, not just at rest. ---------- */
 .history__title{
-  font-size:var(--fs-display-md);
+  font-size:var(--fs-h2);
   font-weight:var(--fw-base);
-  line-height:var(--lh-display);
+  line-height:var(--lh-h2);
+  letter-spacing:var(--display-tracking);
   margin-bottom:var(--space-6);
 }
-.history__body{font-size:var(--fs-h3);color:var(--brand-text-subtle);}
+.history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 .history__years{
   margin-top:var(--space-10);
   gap:0;
   padding-inline:calc(100% / 12);
+  scroll-padding-inline-start:calc(100% / 12);
   padding-block:var(--space-7) var(--space-2);
   scroll-snap-type:x mandatory;
+  scroll-behavior:smooth;
 }
 .history__year{
   flex:0 0 calc(100% / 2.5);
@@ -206,7 +216,7 @@ main{position:relative;z-index:1;}
 .portfolio__grid{row-gap:var(--space-9);}
 .card--project__image{aspect-ratio:4/3;margin-bottom:var(--space-5);}
 .card--project__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
-.card--project__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
+.card--project__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 
 /* ---------- contact (실측: 전체 폭 어두운 패널 + 장식용 세로 디바이더 3개, 중앙 폼) ---------- */
 .contact--panel{position:relative;background:var(--brand-bg-raised);overflow:hidden;}
@@ -216,7 +226,7 @@ main{position:relative;z-index:1;}
 .contact__row{margin-bottom:var(--space-6);}
 .field{display:flex;flex-direction:column;gap:var(--space-2);}
 .field--full{margin-bottom:var(--space-8);}
-.field__label{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
+.field__label{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 .field__input{
   width:100%;
   background:transparent;
@@ -282,7 +292,9 @@ select.field__input{appearance:none;}
 /* ---------- responsive ---------- */
 @media (max-width:1024px){
   .portfolio__grid > *{grid-column:1/11 !important;}
-  .philosophy .grid--10 > *{grid-column:1/11 !important;}
+  .philosophy__layout{flex-direction:column;}
+  .philosophy__text{max-width:none;}
+  .need-card{flex-basis:70vw;}
   .contact__form{grid-column:1/13 !important;}
   .contact__row{grid-template-columns:1fr !important;}
   .contact__row .field{grid-column:1/13 !important;}
