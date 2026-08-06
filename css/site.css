@@ -7,6 +7,7 @@
   --brand-line:#575757; /* measured form input underline */
   --brand-line-dim:#3a3a3a; /* page grid lines — one tone down from --brand-line, too bright as-is */
   --brand-line-bright:#fff; /* bright edge where an element meets a grid line */
+  --brand-card-bg:#292929; /* measured need-card background (node 81:1592) */
   --brand-text-subtle:rgba(255,255,255,.5); /* measured eyebrow color */
 }
 
@@ -112,28 +113,41 @@ main{position:relative;z-index:1;}
   letter-spacing:var(--display-tracking);
 }
 
-/* ---------- featured work: horizontal scroll track, 5 cards ---------- */
+/* ---------- featured work: horizontal scroll track, ~3.5 cards visible ----------
+   card width is a fraction of the TRACK's own width (not vw-capped, which stopped
+   growing past ~320px and let 5 cards fit entirely on wide screens with nothing
+   left to scroll). flex:0 0 calc(...) with N=3.5 guarantees the 5th card always
+   overflows regardless of viewport size. */
 .featured__track{
   gap:var(--space-6);
-  padding-inline:calc(100% / 12);
+  padding-inline:var(--space-6);
   padding-block:var(--space-6) var(--space-2);
 }
-.card--work{flex:0 0 clamp(220px, 22vw, 320px);}
+.card--work{flex:0 0 calc((100% - 2.5 * var(--space-6)) / 3.5);}
 .card--work__image{aspect-ratio:3/4;margin-bottom:var(--space-5);}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
 
-/* ---------- philosophy: left statement fixed, right = scroll track of gray cards ---------- */
+/* ---------- philosophy: left statement fixed, right = scroll track of dark
+   need-cards (실측 node 81:1591/1592: bg #292929, hairline top, 텍스트 20px) ---------- */
 .philosophy__row{display:flex;align-items:flex-start;gap:var(--space-8);}
-.philosophy__text{flex:0 0 auto;max-width:60%;}
+.philosophy__text{flex:0 0 auto;max-width:44%;}
 .philosophy__statement{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
   line-height:var(--lh-h2);
   letter-spacing:var(--display-tracking);
 }
+/* same "guaranteed overflow" sizing as Featured, ~2.5 cards visible since this
+   column only gets the remaining ~56% of the section width */
 .philosophy__needs{flex:1;gap:var(--space-4);}
-.philosophy__need-card{flex:0 0 160px;aspect-ratio:3/4;}
+.need-card{
+  flex:0 0 calc((100% - 1.5 * var(--space-4)) / 2.5);
+  background:var(--brand-card-bg);
+  border-top:1px solid var(--brand-border);
+  padding:var(--space-5) var(--space-6);
+}
+.need-card__text{font-size:var(--fs-body-1);line-height:var(--lh-body);}
 
 /* ---------- history ---------- */
 .history__title{
@@ -150,10 +164,14 @@ main{position:relative;z-index:1;}
 .history__years{
   margin-top:var(--space-10);
   gap:0;
-  padding-inline:calc(100% / 12);
+  padding-inline:var(--space-6);
   padding-block:var(--space-7) var(--space-2);
 }
-.history__year{flex:0 0 clamp(240px, 24vw, 320px);border-left:1px solid var(--brand-border);padding-left:var(--space-5);padding-right:var(--space-5);}
+/* container-relative (not vw-capped) so the 6th card always overflows and
+   forces a real scrollbar, regardless of viewport width — ~3.5 visible.
+   gap is 0 here (the border-left divider is the only separator), so no gap
+   term needed in the width calc. */
+.history__year{flex:0 0 calc(100% / 3.5);border-left:1px solid var(--brand-border);padding-left:var(--space-5);padding-right:var(--space-5);}
 .history__year-num{font-size:var(--fs-h1);font-weight:var(--fw-base);margin-bottom:var(--space-4);}
 .history__list li{
   display:flex;gap:var(--space-3);
