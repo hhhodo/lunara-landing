@@ -192,11 +192,7 @@ main{position:relative;z-index:1;}
 
 /* ---------- history: image removed, title now matches Philosophy's statement
    size (fs-h2) instead of the much-bigger display-md that made the top of
-   the section and the bottom (연혁, kept as-is) look flat/same-weight.
-   Plain .h-scroll track (same as Featured) — native scroll + drag, no pin,
-   no wheel hijacking, no scroll-snap. Leading padding-inline is the same
-   1-column grid inset as everywhere else, so the first year's left edge
-   lines up with the true grid line (skipping column 1). ---------- */
+   the section and the bottom (연혁, kept as-is) look flat/same-weight. ---------- */
 .history__title{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
@@ -205,21 +201,9 @@ main{position:relative;z-index:1;}
   margin-bottom:var(--space-6);
 }
 .history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
-/* pinned: spacer height is a plain fixed CSS value (NOT computed by JS —
-   that's what silently ended up 0/invisible the first time this was tried),
-   position:sticky holds .history-pin__sticky on screen for that scroll
-   distance. The <section> above deliberately has no [data-reveal] — an
-   ancestor's active transform breaks position:sticky in most engines,
-   which is exactly what broke this the second time. */
-.history-pin__spacer{position:relative;height:220vh;}
-.history-pin__sticky{
-  position:sticky;
-  top:0;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  overflow:hidden;
-}
+/* plain .h-scroll (no pin, no wheel hijack — see the HTML comment above for
+   why). scroll-snap-type/scroll-padding still give the "탁탁" snap feel via
+   native drag/trackpad/touch scroll, with no custom JS in the loop. */
 .history__years{
   width:100%;
   gap:0;
@@ -346,8 +330,4 @@ select.field__input{appearance:none;}
      less at this width anyway since columns are already very narrow */
   .card--work{flex-basis:78vw;}
   .history__year{flex-basis:82vw;}
-  /* touch already scrolls the track directly; a tall pinned spacer costs
-     more than it's worth on small screens */
-  .history-pin__spacer{height:auto;}
-  .history-pin__sticky{position:static;height:auto;}
 }

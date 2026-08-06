@@ -76,28 +76,4 @@
 
     markActive(findClosest());
   }
-
-  // ---------- History pin: while the section is stuck on screen
-  // (.history-pin__spacer is CSS position:sticky, fixed-height — see
-  // site.css), redirect vertical wheel/trackpad scroll into the track's
-  // horizontal scrollLeft instead of the page, so scrolling advances the
-  // cards without needing to drag. Once the track hits either end, stop
-  // intercepting so the page scrolls normally past the section.
-  // Deliberately does NOT force a second scrollTo() after the fact — native
-  // CSS scroll-snap (see .history__years) already settles the track at the
-  // nearest card once wheel input stops; adding a JS re-snap on top of that
-  // is what caused a "pauses, then jumps" feel in an earlier version. ----------
-  const historySpacer = document.querySelector('.history-pin__spacer');
-  if (historyTrack && historySpacer) {
-    historySpacer.addEventListener('wheel', (e) => {
-      if (e.deltaY === 0) return;
-      const max = historyTrack.scrollWidth - historyTrack.clientWidth;
-      const atStart = historyTrack.scrollLeft <= 0;
-      const atEnd = historyTrack.scrollLeft >= max - 1;
-      const scrollingDown = e.deltaY > 0;
-      if ((scrollingDown && atEnd) || (!scrollingDown && atStart)) return;
-      e.preventDefault();
-      historyTrack.scrollLeft += e.deltaY;
-    }, { passive: false });
-  }
 })();
