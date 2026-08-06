@@ -71,7 +71,6 @@ main{position:relative;z-index:1;}
 .hero{padding-top:var(--space-11);text-align:center;}
 .hero__inner{
   display:flex;flex-direction:column;align-items:center;
-  border-block:1px solid var(--brand-border);
   padding-block:var(--space-9);
 }
 /* center 4 of 12 page columns: hero__inner's content box is already the
