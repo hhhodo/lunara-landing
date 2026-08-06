@@ -26,6 +26,19 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
    true line k, since the box itself starts flush at true line 1). */
 .grid--10{grid-template-columns:repeat(10,1fr);}
 
+/* horizontal-scroll track shared by Featured / Philosophy needs / History —
+   native overflow-x:auto (trackpad, shift+wheel, touch), plus mouse-drag via
+   js/main.js. No arrow buttons or dot pagination. */
+.h-scroll{
+  display:flex;
+  overflow-x:auto;
+  overscroll-behavior-x:contain;
+  cursor:grab;
+  scrollbar-width:none;
+}
+.h-scroll::-webkit-scrollbar{display:none;}
+.h-scroll.is-dragging{cursor:grabbing;user-select:none;}
+
 /* sitewide vertical column-line overlay — 11 lines at the boundaries of a
    full-bleed 12-col grid, drawn once behind all sections so it reads as one
    continuous set of lines down the whole page rather than per-section.
@@ -99,33 +112,28 @@ main{position:relative;z-index:1;}
   letter-spacing:var(--display-tracking);
 }
 
-/* ---------- featured work ---------- */
-/* inset 50px in from each column line (cards sit flush against them at
-   0 gutter), centered, tall portrait ratio instead of the flush 4:3 block */
-.card--work__image{
-  width:calc(100% - 100px);
-  margin-inline:auto;
-  aspect-ratio:3/4;
-  margin-bottom:var(--space-5);
+/* ---------- featured work: horizontal scroll track, 5 cards ---------- */
+.featured__track{
+  gap:var(--space-6);
+  padding-inline:calc(100% / 12);
+  padding-block:var(--space-6) var(--space-2);
 }
+.card--work{flex:0 0 clamp(220px, 22vw, 320px);}
+.card--work__image{aspect-ratio:3/4;margin-bottom:var(--space-5);}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-2);color:var(--brand-text-subtle);}
 
-/* ---------- philosophy + needs cards ---------- */
-.philosophy{}
+/* ---------- philosophy: left statement fixed, right = scroll track of gray cards ---------- */
+.philosophy__row{display:flex;align-items:flex-start;gap:var(--space-8);}
+.philosophy__text{flex:0 0 auto;max-width:60%;}
 .philosophy__statement{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
   line-height:var(--lh-h2);
   letter-spacing:var(--display-tracking);
 }
-.philosophy__needs{display:flex;flex-direction:column;gap:var(--space-4);}
-.need-card{
-  background:var(--brand-bg);
-  border-top:1px solid var(--brand-border);
-  padding:var(--space-5) var(--space-6);
-}
-.need-card__text{font-size:var(--fs-body-1);line-height:var(--lh-body);}
+.philosophy__needs{flex:1;gap:var(--space-4);}
+.philosophy__need-card{flex:0 0 160px;aspect-ratio:3/4;}
 
 /* ---------- history ---------- */
 .history__title{
@@ -136,17 +144,23 @@ main{position:relative;z-index:1;}
 }
 .history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 .history__placeholder{aspect-ratio:1/1;}
-.history__years{margin-top:var(--space-10);padding-top:var(--space-7);border-top:1px solid var(--brand-border);}
-.history__year{border-left:1px solid var(--brand-border);padding-left:var(--space-5);}
+/* single-row horizontal scroll track — the fine per-item hairlines that used
+   to sit between list rows are gone; only the left divider between year
+   columns remains */
+.history__years{
+  margin-top:var(--space-10);
+  gap:0;
+  padding-inline:calc(100% / 12);
+  padding-block:var(--space-7) var(--space-2);
+}
+.history__year{flex:0 0 clamp(240px, 24vw, 320px);border-left:1px solid var(--brand-border);padding-left:var(--space-5);padding-right:var(--space-5);}
 .history__year-num{font-size:var(--fs-h1);font-weight:var(--fw-base);margin-bottom:var(--space-4);}
 .history__list li{
   display:flex;gap:var(--space-3);
   font-size:var(--fs-body-2);
   color:var(--brand-text-subtle);
   padding-block:var(--space-2);
-  border-top:1px solid var(--brand-border);
 }
-.history__list li:last-child{border-bottom:1px solid var(--brand-border);}
 .history__month{color:var(--text-default-inverse);}
 
 /* ---------- portfolio bento ---------- */
@@ -228,11 +242,10 @@ select.field__input{appearance:none;}
 
 /* ---------- responsive ---------- */
 @media (max-width:1024px){
-  .featured__grid > *,
-  .portfolio__grid > *{grid-column:1/13 !important;}
-  .philosophy .grid > *,
-  .history .grid > *{grid-column:1/13 !important;}
-  .history__years{grid-template-columns:1fr;}
+  .portfolio__grid > *{grid-column:1/11 !important;}
+  .history .grid--10 > *{grid-column:1/11 !important;}
+  .philosophy__row{flex-direction:column;}
+  .philosophy__text{max-width:none;}
   .contact__form{grid-column:1/13 !important;}
   .contact__row{grid-template-columns:1fr !important;}
   .contact__row .field{grid-column:1/13 !important;}
