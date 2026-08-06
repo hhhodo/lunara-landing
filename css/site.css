@@ -40,27 +40,6 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .h-scroll::-webkit-scrollbar{display:none;}
 .h-scroll.is-dragging{cursor:grabbing;user-select:none;}
 
-/* History pin: spacer height is a plain fixed CSS value (NOT computed by
-   JS) so the section is guaranteed to render and take up real space even if
-   the enhancement script below fails entirely — the previous pin attempt's
-   invisibility bug came from relying on JS to set this. position:sticky
-   holds .history-pin__sticky on screen for that 220vh of scroll; js/main.js
-   only adds a wheel listener that redirects vertical scroll into the
-   track's horizontal scrollLeft while pinned, releasing back to normal page
-   scroll once the track hits either end.
-   IMPORTANT: the <section class="section history"> wrapper must NEVER get
-   [data-reveal] back — that class's base transform on an ancestor is what
-   silently broke position:sticky here twice already. */
-.history-pin__spacer{position:relative;height:220vh;}
-.history-pin__sticky{
-  position:sticky;
-  top:0;
-  height:100vh;
-  display:flex;
-  align-items:center;
-  overflow:hidden;
-}
-
 /* sitewide vertical column-line overlay — 11 lines at the boundaries of a
    full-bleed 12-col grid, drawn once behind all sections so it reads as one
    continuous set of lines down the whole page rather than per-section.
@@ -195,13 +174,10 @@ main{position:relative;z-index:1;}
 /* ---------- history: image removed, title now matches Philosophy's statement
    size (fs-h2) instead of the much-bigger display-md that made the top of
    the section and the bottom (연혁, kept as-is) look flat/same-weight.
-   Track is .h-scroll (drag/native scroll all work) wrapped in a pin
-   (.history-pin__*, see above) whose wheel listener moves scrollLeft
-   directly/continuously — no scroll-snap here anymore, since CSS snap
-   fighting the wheel handler was exactly what caused the "pauses then
-   jumps" feel. Leading padding-inline is still the 1-column grid inset, so
-   the first year's left edge lines up with the true grid line (skipping
-   column 1). ---------- */
+   Plain .h-scroll track (same as Featured) — native scroll + drag, no pin,
+   no wheel hijacking, no scroll-snap. Leading padding-inline is the same
+   1-column grid inset as everywhere else, so the first year's left edge
+   lines up with the true grid line (skipping column 1). ---------- */
 .history__title{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
@@ -320,8 +296,4 @@ select.field__input{appearance:none;}
   .contact__row .field{grid-column:1/13 !important;}
   .contact__dividers{display:none;}
   .footer__row{flex-direction:column;align-items:center;}
-  /* touch scroll works directly on the track; the wheel-driven pin holds
-     less value here and a tall sticky spacer costs more on small screens */
-  .history-pin__spacer{height:auto;}
-  .history-pin__sticky{position:static;height:auto;}
 }

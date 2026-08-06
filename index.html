@@ -157,18 +157,15 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
     </div>
   </section>
 
-  <!-- About / History — 이전 pin-scroll(JS로 spacer 높이 계산)이 안 보이는 버그를 냈던 걸
-       교훈 삼아, 이번엔 spacer 높이를 순수 CSS 고정값(220vh)으로 줘서 "보이는가"는 JS 성공
-       여부와 무관하게 항상 보장되도록 함. 화면이 고정된 동안 휠/트랙패드 스크롤을 JS가 가로
-       스크롤로 변환(history-pin 리스너)해 자동으로 넘어가고, 다 넘어가면 페이지 스크롤이
-       이어짐. 드래그도 그대로 가능. 스냅된 연혁의 좌측 라인만 흰색(js). -->
-  <section class="section history">
+  <!-- About / History — pin/wheel-hijack was tried repeatedly and kept breaking
+       in ways I couldn't verify without a real browser. Simplified to exactly
+       Featured's pattern: plain .h-scroll (native scroll + drag), nothing else.
+       Reliable over fancy. Snapped-nearest year's left line goes white (js, passive). -->
+  <section class="section history" data-reveal>
     <div class="bleed">
       <h2 class="history__title">History of<br>LUNARA</h2>
       <p class="history__body measure">2021년, 세 명의 에디터가 모여 시작한 작은 기록 프로젝트가 지금은 라이프스타일 브랜드와 공간을 위한 콘텐츠 스튜디오로 자랐습니다.</p>
     </div>
-   <div class="history-pin__spacer">
-    <div class="history-pin__sticky">
     <div class="h-scroll history__years">
         <div class="history__year">
           <p class="history__year-num">2026</p>
@@ -213,8 +210,6 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
           </ul>
         </div>
     </div>
-    </div>
-   </div>
   </section>
 
   <!-- Portfolio bento — row1 3-3-6 / row2 3-3-3-3 -->
