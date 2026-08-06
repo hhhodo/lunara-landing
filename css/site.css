@@ -69,7 +69,7 @@ main{position:relative;z-index:1;}
    A ::before 6px larger than the image on every side (inset:-3px) puts the
    expanded box's own corners exactly on the image's real corner points, so
    corner-flush dots on THAT box land centered on the image's corners. */
-.img{position:relative;}
+.img{position:relative;background-size:cover;background-position:center;}
 .img::before{
   content:"";
   position:absolute;

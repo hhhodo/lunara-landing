@@ -1,1 +1,11 @@
 .DS_Store
+
+# unused source photos (kept locally, not needed on the deployed site):
+# caroline-attwood — shows a real competing brand's packaging text
+# evgeny-matveev — a specific, recognizable real temple (Angkor Wat)
+# enache-georgiana / anya-chernykh / tommy-bond — extra shots not assigned to any section
+assets/images/caroline-attwood-BIpRqkGlBh8-unsplash.jpg
+assets/images/evgeny-matveev-Ymi1egoBFEw-unsplash.jpg
+assets/images/enache-georgiana-XsvZ5qKxano-unsplash.jpg
+assets/images/anya-chernykh-e9BC76KvwiA-unsplash.jpg
+assets/images/tommy-bond-YVqyNhfLw-M-unsplash.jpg
