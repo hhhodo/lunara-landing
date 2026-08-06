@@ -47,7 +47,10 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
    holds .history-pin__sticky on screen for that 220vh of scroll; js/main.js
    only adds a wheel listener that redirects vertical scroll into the
    track's horizontal scrollLeft while pinned, releasing back to normal page
-   scroll once the track hits either end. */
+   scroll once the track hits either end.
+   IMPORTANT: the <section class="section history"> wrapper must NEVER get
+   [data-reveal] back — that class's base transform on an ancestor is what
+   silently broke position:sticky here twice already. */
 .history-pin__spacer{position:relative;height:220vh;}
 .history-pin__sticky{
   position:sticky;
