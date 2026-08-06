@@ -40,12 +40,14 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
 .h-scroll::-webkit-scrollbar{display:none;}
 .h-scroll.is-dragging{cursor:grabbing;user-select:none;}
 
-/* pinned horizontal-reveal — Philosophy needs / History years. The section
-   stays fixed on screen (position:sticky inside a tall spacer) for the
-   entire vertical scroll distance needed to horizontally reveal every card
-   in [data-pin-track] (translateX driven by scroll progress, js/main.js
-   initPinScroll) — the page only continues past the section once the whole
-   track has scrolled into view. */
+/* pinned horizontal-reveal — History years only (Philosophy went back to a
+   plain vertical stack, see below). The section stays fixed on screen
+   (position:sticky inside a tall spacer) for the scroll distance needed to
+   reveal every card in [data-pin-track] one discrete step at a time
+   (js/main.js initPinScroll) — the page only continues past the section
+   once every card has been shown. Opaque background on the sticky layer so
+   the page's own scrolling background (page-lines etc.) can't show through
+   and appear to "move" behind the pinned content. */
 .pin-scroll__spacer{position:relative;}
 .pin-scroll__sticky{
   position:sticky;
@@ -54,6 +56,7 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
   display:flex;
   align-items:center;
   overflow:hidden;
+  background:var(--brand-bg);
 }
 [data-pin-track]{display:flex;will-change:transform;}
 
@@ -148,25 +151,25 @@ main{position:relative;z-index:1;}
 .card--work__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--work__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 
-/* ---------- philosophy: left statement is a plain flex sibling (never moves —
-   only its sibling's OWN overflow-x scrolls, no sticky needed). Right needs
-   track sized directly off the viewport (33.333vw = 4 of the site's 12 grid
-   columns) rather than a fraction of the (smaller) track box, per request to
-   size them "off 4 grid columns" instead of the previous cramped 3-column
-   local-grid box. Bordered + corner-dotted like any element that visually
-   reads as touching a grid unit; icon added above the copy in each card. ---------- */
-.philosophy__layout{display:flex;align-items:flex-start;gap:var(--space-8);}
-.philosophy__text{flex:0 0 auto;max-width:40%;}
+/* ---------- philosophy: local grid--10, text 1/7 (6 real cols) : cards 7/11
+   (4 real cols, true line7–line11 — "그리드 4개 기준"). Text column is
+   position:sticky so it stays on screen for as long as the (taller, once 5
+   cards are stacked) card column takes to scroll past — this is what makes
+   "왼쪽 고정" work without any translateX/pin-scroll trick. Cards stack
+   VERTICALLY in normal flow and float up one at a time via the shared
+   [data-reveal] animation (staggered transition-delay) as the page scrolls
+   — NOT horizontal drag/scroll. Bordered + corner-dotted since the card
+   column's left/right edges sit on real grid lines. ---------- */
+.philosophy__text{position:sticky;top:var(--space-9);align-self:start;}
 .philosophy__statement{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
   line-height:var(--lh-h2);
   letter-spacing:var(--display-tracking);
 }
-.philosophy__needs{flex:1;gap:var(--space-4);padding-block:var(--space-2);}
+.philosophy__needs{display:flex;flex-direction:column;gap:var(--space-4);}
 .need-card{
   position:relative;
-  flex:0 0 33.333vw;
   background:var(--brand-card-bg);
   border:1px solid var(--brand-line-bright);
   padding:var(--space-6) var(--space-7);
@@ -191,11 +194,12 @@ main{position:relative;z-index:1;}
 /* ---------- history: image removed, title now matches Philosophy's statement
    size (fs-h2) instead of the much-bigger display-md that made the top of
    the section and the bottom (연혁, kept as-is) look flat/same-weight.
-   The years track itself is pinned/reveal-scrolled (see .pin-scroll rules
-   above + initPinScroll in js/main.js) — leading padding-inline is the same
-   1-column inset as everywhere else, so the first (and, once "snapped" by
-   the js active-line logic, every subsequent) year's left edge lines up
-   with the same true grid line — skipping column 1. ---------- */
+   Original spacing (margin-top/padding-block) restored — an earlier pass
+   dropped these by mistake. The years track is pinned (see .pin-scroll
+   rules + initPinScroll in js/main.js) and advances ONE card per discrete
+   scroll step (not continuous 1:1 translateX) — leading padding-inline is
+   the same 1-column inset as everywhere else, so every snapped year's left
+   edge lands on the same true grid line, skipping column 1. ---------- */
 .history__title{
   font-size:var(--fs-h2);
   font-weight:var(--fw-base);
@@ -205,8 +209,11 @@ main{position:relative;z-index:1;}
 }
 .history__body{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 .history__years{
+  margin-top:var(--space-10);
   gap:0;
   padding-inline:calc(100% / 12) 0;
+  padding-block:var(--space-7) var(--space-2);
+  transition:transform .5s cubic-bezier(.22,.8,.36,1);
 }
 .history__year{
   flex:0 0 calc(100% / 2.5);
@@ -305,9 +312,8 @@ select.field__input{appearance:none;}
 /* ---------- responsive ---------- */
 @media (max-width:1024px){
   .portfolio__grid > *{grid-column:1/11 !important;}
-  .philosophy__layout{flex-direction:column;}
-  .philosophy__text{max-width:none;}
-  .need-card{flex-basis:70vw;}
+  .philosophy .grid--10 > *{grid-column:1/11 !important;}
+  .philosophy__text{position:static;}
   .contact__form{grid-column:1/13 !important;}
   .contact__row{grid-template-columns:1fr !important;}
   .contact__row .field{grid-column:1/13 !important;}
