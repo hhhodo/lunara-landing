@@ -15,11 +15,15 @@ spacing=space-section
 -->
 <!--
 layout: (실측: get_design_context 섹션별 개별 호출, 81:2183/81:1498/81:3558/81:4621/81:2354/81:3221)
-Hero          → 단일 중앙 컬럼(1150/1680, 이미지 위·아래 hairline border) → 이미지 → eyebrow → 워드마크 순서
-Featured      → 4-4-4 (원본은 8카드 가로 스크롤 트랙 — 캐러셀 제외 지시에 따라 3카드 정적 그리드로 축약, README에 명시)
-Philosophy    → 9-3 (실측 1113.3/1520 : 546.7/1520 → 반올림), 좌 스테이트먼트 + 우 니즈 카드 2개 정적 스택(원본 5카드 슬라이더의 "01/05" 카운터만 제외, 카드 자체는 유지)
-About/History → 8-4 헤딩+플레이스홀더, 그 아래 6개년(2026~2021) 실측 그대로 유지, 원본 가로 스크롤 트랙 대신 3-3(2행) 정적 랩 그리드로 구현
-Portfolio     → row1 3-3-6 / row2 3-3-3-3 (7 project cards, 실측 그대로)
+Hero          → 이미지 → eyebrow → 워드마크. 이미지는 페이지 12컬럼 기준 가운데 4컬럼(40% of 10-col box)
+Featured      → 3-3-3(local grid--10, 10컬럼 중 9칸 사용) — 카드 경계가 실제 페이지 라인과 일치
+Philosophy    → 9-3, 좌 스테이트먼트 + 우 니즈 카드 2개 정적 스택
+About/History → 헤딩 7 : 플레이스홀더 3(local grid--10) — 이미지 경계가 실제 라인과 일치, 아래 6개년 3-3(2행)
+Portfolio     → row1 3-3-4 / row2 3-3-2-2 (local grid--10, 실제 라인과 일치하도록 12→10 스케일 재계산)
+
+주: featured__grid/history 상단/portfolio__grid는 .bleed(10컬럼 폭) 안에서 다시 12등분하면 실제
+페이지 라인과 어긋나므로, 전용 .grid--10(10등분)으로 바꿔 카드/이미지 경계가 실제 세로 라인과
+정확히 겹치도록 재계산했다 (사용자 피드백: "이미지랑 라인이랑 맞게 해줘").
 Contact       → 배경 전체 어두운 패널 위 중앙 6/12 폼(480–1440/1680), 4분할 지점에 실측 세로 디바이더 3개(장식용, 480/960/1440)
 Footer        → 실측 그대로: 중앙 이메일 1행 → business/address/phone/instagram 라벨+값 2행(자연폭 flex) → 중앙 카피라이트
 
@@ -71,18 +75,18 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
   <section class="section featured" data-reveal>
     <div class="bleed">
       <p class="eyebrow">Featured</p>
-      <div class="grid grid--flush featured__grid">
-        <article class="card card--work" style="grid-column:1/5">
+      <div class="grid grid--flush grid--10 featured__grid">
+        <article class="card card--work" style="grid-column:1/4">
           <div class="img card--work__image"></div>
           <p class="card--work__title">모닝 루틴 다큐멘터리</p>
           <p class="card--work__meta">필름 · 브랜디드 콘텐츠<br>Client. Aesop Korea</p>
         </article>
-        <article class="card card--work" style="grid-column:5/9">
+        <article class="card card--work" style="grid-column:4/7">
           <div class="img card--work__image"></div>
           <p class="card--work__title">리빙 브랜드 캠페인</p>
           <p class="card--work__meta">캠페인 · 공간 화보<br>Client. Fritz Coffee</p>
         </article>
-        <article class="card card--work" style="grid-column:9/13">
+        <article class="card card--work" style="grid-column:7/10">
           <div class="img card--work__image"></div>
           <p class="card--work__title">웰니스 저널 시리즈</p>
           <p class="card--work__meta">시리즈 · 에디토리얼<br>Client. Class101</p>
@@ -113,23 +117,23 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
   <!-- About / History — 8-4 heading, then static 4-4-4 year columns -->
   <section class="section history" data-reveal>
     <div class="bleed">
-      <div class="grid grid--flush">
-        <div style="grid-column:1/9">
+      <div class="grid grid--flush grid--10">
+        <div style="grid-column:1/8">
           <h2 class="history__title">History of<br>LUNARA</h2>
           <p class="history__body measure">2021년, 세 명의 에디터가 모여 시작한 작은 기록 프로젝트가 지금은 라이프스타일 브랜드와 공간을 위한 콘텐츠 스튜디오로 자랐습니다.</p>
         </div>
-        <div class="img history__placeholder" style="grid-column:9/13"></div>
+        <div class="img history__placeholder" style="grid-column:8/11"></div>
       </div>
 
-      <div class="grid grid--flush history__years">
-        <div class="history__year" style="grid-column:1/5">
+      <div class="grid grid--flush grid--10 history__years">
+        <div class="history__year" style="grid-column:1/4">
           <p class="history__year-num">2026</p>
           <ul class="history__list">
             <li><span class="history__month">10</span>도쿄 팝업 스튜디오 오픈 예정</li>
             <li><span class="history__month">03</span>LUNARA 필름 레이블 론칭</li>
           </ul>
         </div>
-        <div class="history__year" style="grid-column:5/9">
+        <div class="history__year" style="grid-column:4/7">
           <p class="history__year-num">2025</p>
           <ul class="history__list">
             <li><span class="history__month">12</span>올해의 라이프스타일 스튜디오 선정</li>
@@ -137,28 +141,28 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
             <li><span class="history__month">04</span>연간 파트너 브랜드 12곳 돌파</li>
           </ul>
         </div>
-        <div class="history__year" style="grid-column:9/13">
+        <div class="history__year" style="grid-column:7/10">
           <p class="history__year-num">2024</p>
           <ul class="history__list">
             <li><span class="history__month">09</span>서울 성수 스튜디오 확장 이전</li>
             <li><span class="history__month">02</span>공간 화보 전담팀 신설</li>
           </ul>
         </div>
-        <div class="history__year" style="grid-column:1/5">
+        <div class="history__year" style="grid-column:1/4">
           <p class="history__year-num">2023</p>
           <ul class="history__list">
             <li><span class="history__month">10</span>첫 브랜드 다큐멘터리 공개</li>
             <li><span class="history__month">05</span>에디토리얼 팀 신설</li>
           </ul>
         </div>
-        <div class="history__year" style="grid-column:5/9">
+        <div class="history__year" style="grid-column:4/7">
           <p class="history__year-num">2022</p>
           <ul class="history__list">
             <li><span class="history__month">08</span>첫 브랜드 파트너십 계약 체결</li>
             <li><span class="history__month">03</span>스튜디오 촬영 공간 개설</li>
           </ul>
         </div>
-        <div class="history__year" style="grid-column:9/13">
+        <div class="history__year" style="grid-column:7/10">
           <p class="history__year-num">2021</p>
           <ul class="history__list">
             <li><span class="history__month">11</span>LUNARA 스튜디오 정식 설립</li>
@@ -172,7 +176,7 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
   <section class="section portfolio" data-reveal>
     <div class="bleed">
       <p class="eyebrow">Selected Works</p>
-      <div class="grid grid--flush portfolio__grid">
+      <div class="grid grid--flush grid--10 portfolio__grid">
         <article class="card card--project" style="grid-column:1/4">
           <div class="img card--project__image"></div>
           <p class="card--project__title">보드게임 카페 화보</p>
@@ -183,7 +187,7 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
           <p class="card--project__title">캠퍼스 매거진</p>
           <p class="card--project__meta">Editorial<br>Client. Taejae University</p>
         </article>
-        <article class="card card--project" style="grid-column:7/13">
+        <article class="card card--project" style="grid-column:7/11">
           <div class="img card--project__image"></div>
           <p class="card--project__title">브랜드 무드필름</p>
           <p class="card--project__meta">Film<br>Client. KRAFTON</p>
@@ -199,12 +203,12 @@ Excluded per brief ("페이지 이동으로 보이는 모든 요소는 빼줘"):
           <p class="card--project__title">사옥 스페이스 필름</p>
           <p class="card--project__meta">Editorial<br>Client. HYBE Corp</p>
         </article>
-        <article class="card card--project" style="grid-column:7/10">
+        <article class="card card--project" style="grid-column:7/9">
           <div class="img card--project__image"></div>
           <p class="card--project__title">워크웨어 룩북</p>
           <p class="card--project__meta">Editorial<br>Client. TONEWORK</p>
         </article>
-        <article class="card card--project" style="grid-column:10/13">
+        <article class="card card--project" style="grid-column:9/11">
           <div class="img card--project__image"></div>
           <p class="card--project__title">데일리 오브제 화보</p>
           <p class="card--project__meta">Editorial<br>Client. Amore Ourway</p>

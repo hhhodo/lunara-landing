@@ -17,6 +17,15 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
    inner 10 columns (2–11) while the 12-col grid itself stays edge-to-edge. */
 .bleed{width:100%;max-width:none;margin-inline:0;padding-inline:calc(100% / 12);}
 
+/* .bleed insets to exactly 10 real page-columns' width. A plain .grid nested
+   inside it re-divides THAT box into a fresh 12ths, which are narrower than
+   a true page column and land nowhere near the visible page-lines. .grid--10
+   divides it into 10ths instead — each local unit then equals exactly one
+   true page column, so any grid-column boundary inside it lands exactly on
+   a real line (verified: local line k = content-box-left + k·(100%/12) =
+   true line k, since the box itself starts flush at true line 1). */
+.grid--10{grid-template-columns:repeat(10,1fr);}
+
 /* sitewide vertical column-line overlay — 11 lines at the boundaries of a
    full-bleed 12-col grid, drawn once behind all sections so it reads as one
    continuous set of lines down the whole page rather than per-section.
