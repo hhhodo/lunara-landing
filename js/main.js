@@ -91,13 +91,32 @@
       busyTimer = window.setTimeout(clearBusy, 700);
     };
 
-    const fillsViewport = () => {
+    // .history's height is exactly one viewport (min-height:100vh, no
+    // taller spacer — everything fits on one screen by design), so "the
+    // section exactly fills the viewport" is only literally true for
+    // ~1px of scroll position around rect.top===0. A real scroll (trackpad
+    // momentum, a fast wheel) moves many px between animation frames and
+    // jumps clean over that 1px window without ever landing inside it, so
+    // the gate never opened and the section just glided past untouched.
+    // nearlyFills uses a wide catch band instead (a fraction of the
+    // viewport height) so a fast scroll can't skip past it, and once
+    // caught the position is snapped precisely to rect.top===0 so the
+    // section still ends up exactly filling the screen regardless of
+    // where inside the band it was caught.
+    let engaged = false;
+    const nearlyFills = () => {
       const rect = historySection.getBoundingClientRect();
-      return rect.top <= 0.5 && rect.bottom >= window.innerHeight - 0.5;
+      const buffer = window.innerHeight * 0.35;
+      return rect.top <= buffer && rect.bottom >= window.innerHeight - buffer;
     };
 
     window.addEventListener('wheel', (e) => {
-      if (!fillsViewport()) return;
+      if (!nearlyFills()) { engaged = false; return; }
+      if (!engaged) {
+        engaged = true;
+        const rect = historySection.getBoundingClientRect();
+        if (Math.abs(rect.top) > 0.5) window.scrollBy(0, rect.top);
+      }
       if (busy) { e.preventDefault(); return; }
       if (e.deltaY > 0 && index < years.length - 1) {
         e.preventDefault();
