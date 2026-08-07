@@ -325,10 +325,21 @@ select.field__input{appearance:none;}
   border:1px solid var(--text-default-inverse);
   color:var(--text-default-inverse);
 }
+.contact__submit{display:block;margin-inline:auto;}
 
-/* ---------- footer (실측: 중앙 이메일 → business/address/phone/instagram 자연폭 flex → 중앙 카피) ---------- */
-.footer{border-top:1px solid var(--brand-line);padding-block:var(--space-8);text-align:center;}
-.footer__email{font-size:var(--fs-h3);font-weight:var(--fw-base);}
+/* ---------- footer (실측: 중앙 이메일 → business/address/phone/instagram 자연폭 flex → 중앙 카피).
+   background:var(--brand-bg) added so the sitewide vertical .page-lines (which show through any
+   element with a transparent background, including footer previously) don't show through here —
+   footer is meant to be fully line-free. Sizes cut way down from --fs-h3(32px) and weight made
+   explicit --fw-base everywhere (uppercase text at that size was reading as bold even at
+   regular weight, just from sheer size). ---------- */
+.footer{
+  border-top:1px solid var(--brand-line);
+  background:var(--brand-bg);
+  padding-block:var(--space-8);
+  text-align:center;
+}
+.footer__email{font-size:var(--fs-body-2);font-weight:var(--fw-base);}
 .footer__row{
   display:flex;
   flex-wrap:wrap;
@@ -338,11 +349,12 @@ select.field__input{appearance:none;}
   margin-top:var(--space-6);
 }
 .footer__item{display:flex;align-items:baseline;gap:var(--space-2);}
-.footer__label{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
-.footer__value{font-size:var(--fs-h3);text-transform:uppercase;}
+.footer__label{font-size:var(--fs-badge);font-weight:var(--fw-base);color:var(--brand-text-subtle);}
+.footer__value{font-size:var(--fs-badge);font-weight:var(--fw-base);text-transform:uppercase;}
 .footer__copy{
   margin-top:var(--space-6);
-  font-size:var(--fs-h3);
+  font-size:var(--fs-badge);
+  font-weight:var(--fw-base);
   text-transform:uppercase;
   color:var(--brand-text-subtle);
 }
