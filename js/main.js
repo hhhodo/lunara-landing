@@ -47,10 +47,14 @@
   // one card via scrollTo() and preventDefault()s only while another card
   // transition is possible; at the first/last card the event is left alone
   // so the page scrolls on normally — this can never trap scrolling like
-  // the earlier wheel-hijack version did. No time-based lock between ticks
-  // either (an earlier version swallowed all wheel input for 550ms after
-  // each transition, which felt like scrolling had gotten stuck) — a new
-  // tick just retargets scrollTo(), which is harmless mid-animation.
+  // the earlier wheel-hijack version did.
+  // While a transition is in flight ("busy"), further wheel ticks are
+  // swallowed so one trackpad gesture (which fires many small wheel events)
+  // can't blow through several cards at once — busy clears on the track's
+  // own 'scrollend' (fires the moment the smooth-scroll actually settles,
+  // so it can't outlast the animation the way an earlier fixed 550ms lock
+  // did, which felt like scrolling had gotten stuck). A short timeout is
+  // kept only as a fallback for engines without 'scrollend' support.
   // Skipped below 1025px, where CSS falls back to a plain swipeable
   // overflow-x strip (see the matching @media block).
   const historySection = document.querySelector('.history');
@@ -58,16 +62,25 @@
   if (historySection && historyTrack && window.matchMedia('(min-width: 1025px)').matches) {
     const years = [...historyTrack.querySelectorAll('.history__year')];
     let index = 0;
+    let busy = false;
+    let busyTimer = null;
 
     const markActive = () => years.forEach((y, i) => y.classList.toggle('is-active', i === index));
 
+    const clearBusy = () => { busy = false; window.clearTimeout(busyTimer); };
+    historyTrack.addEventListener('scrollend', clearBusy);
+
     const goTo = (next) => {
       index = Math.max(0, Math.min(years.length - 1, next));
+      busy = true;
       historyTrack.scrollTo({ left: years[index].offsetLeft, behavior: 'smooth' });
       markActive();
+      window.clearTimeout(busyTimer);
+      busyTimer = window.setTimeout(clearBusy, 700);
     };
 
     historySection.addEventListener('wheel', (e) => {
+      if (busy) { e.preventDefault(); return; }
       if (e.deltaY > 0 && index < years.length - 1) {
         e.preventDefault();
         goTo(index + 1);
