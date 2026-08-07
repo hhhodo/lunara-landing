@@ -40,22 +40,22 @@
     track.addEventListener('pointerleave', endDrag);
   });
 
-  // ---------- History: pinned reveal, one card per wheel notch ----------
-  // .history-pin__spacer holds .history-pin__sticky (position:sticky) on
-  // screen while the track pages horizontally via native CSS scroll-snap.
-  // Each wheel tick advances/retreats exactly one card via scrollTo() and
-  // preventDefault()s only while another card transition is possible; at
-  // the first/last card the event is left alone so the page scrolls on
-  // normally — this can never trap scrolling like the earlier wheel-hijack
-  // version did. No time-based lock between ticks either (an earlier
-  // version swallowed all wheel input for 550ms after each transition,
-  // which felt like scrolling had gotten stuck) — a new tick just retargets
-  // scrollTo(), which is harmless mid-animation. Skipped below 1025px,
-  // where CSS falls back to a plain swipeable overflow-x strip (see the
-  // matching @media block).
-  const historySpacer = document.querySelector('.history-pin__spacer');
+  // ---------- History: one card per wheel notch, no vertical pin ----------
+  // The section has no scroll-jacked spacer anymore (it now just sits in
+  // normal flow, sized to fit one screen) — the year row pages horizontally
+  // via native CSS scroll-snap. Each wheel tick advances/retreats exactly
+  // one card via scrollTo() and preventDefault()s only while another card
+  // transition is possible; at the first/last card the event is left alone
+  // so the page scrolls on normally — this can never trap scrolling like
+  // the earlier wheel-hijack version did. No time-based lock between ticks
+  // either (an earlier version swallowed all wheel input for 550ms after
+  // each transition, which felt like scrolling had gotten stuck) — a new
+  // tick just retargets scrollTo(), which is harmless mid-animation.
+  // Skipped below 1025px, where CSS falls back to a plain swipeable
+  // overflow-x strip (see the matching @media block).
+  const historySection = document.querySelector('.history');
   const historyTrack = document.querySelector('[data-pin-track]');
-  if (historySpacer && historyTrack && window.matchMedia('(min-width: 1025px)').matches) {
+  if (historySection && historyTrack && window.matchMedia('(min-width: 1025px)').matches) {
     const years = [...historyTrack.querySelectorAll('.history__year')];
     let index = 0;
 
@@ -67,7 +67,7 @@
       markActive();
     };
 
-    historySpacer.addEventListener('wheel', (e) => {
+    historySection.addEventListener('wheel', (e) => {
       if (e.deltaY > 0 && index < years.length - 1) {
         e.preventDefault();
         goTo(index + 1);
