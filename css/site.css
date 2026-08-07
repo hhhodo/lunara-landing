@@ -217,12 +217,17 @@ main{position:relative;z-index:1;}
   display:flex;
   align-items:center;
   overflow:hidden;
+  /* inset lives here (a non-scrolling ancestor), not on the scroll
+     container itself — padding on the scrollable track gets treated as
+     "already scrolled past" by mandatory scroll-snap and silently eaten
+     on load, which is what threw the first card's left edge off the grid
+     line. */
+  padding-inline-start:calc(100% / 12);
 }
 .history__years{
   display:flex;
   width:100%;
   gap:0;
-  padding-inline:calc(100% / 12) 0;
   padding-block:var(--space-7) var(--space-2);
   overflow-x:auto;
   overflow-y:hidden;
@@ -232,8 +237,10 @@ main{position:relative;z-index:1;}
 .history__years::-webkit-scrollbar{display:none;}
 /* 4 real page columns, expressed as % of the track's own content box (not
    vw — see the .card--work comment above for why vw drifts off the grid).
-   Padding-inline here is LEFT ONLY (calc(100%/12) 0), so content box is
-   11/12 of the page — 4 columns of that = (4/12)/(11/12) = 4/11. */
+   The track's width:100% resolves against .history-pin__sticky's content
+   box, which is already inset by 1 column (see its padding-inline-start
+   above), so the track itself is exactly 11/12 of the page — 4 columns of
+   that = (4/12)/(11/12) = 4/11. */
 .history__year{
   flex:0 0 calc(400% / 11);
   border-left:1px solid var(--brand-border);
