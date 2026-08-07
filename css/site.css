@@ -233,6 +233,13 @@ main{position:relative;z-index:1;}
   scrollbar-width:none;
 }
 .history__years::-webkit-scrollbar{display:none;}
+/* trailing spacer so the last card can actually reach scroll-snap-align:start
+   flush against the left edge. Without it, native max scrollLeft is capped
+   at scrollWidth-clientWidth — with 6 cards at 4/11 track-width each, that
+   cap lands short of the last card's own offsetLeft, so it stalls mid-track
+   instead of snapping fully left. calc(700%/11) = 100% - one card width
+   (calc(400%/11)), the exact gap needed to let it travel the rest of the way. */
+.history__years::after{content:"";flex:0 0 calc(700% / 11);}
 /* 4 real page columns, expressed as % of the track's own content box (not
    vw — see the .card--work comment above for why vw drifts off the grid).
    The track's width:100% resolves against .history__years-wrap's content
