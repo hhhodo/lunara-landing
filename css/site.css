@@ -274,12 +274,18 @@ main{position:relative;z-index:1;}
 .card--project__title{font-size:var(--fs-body-1);font-weight:var(--fw-base);margin-bottom:var(--space-2);}
 .card--project__meta{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
 
-/* ---------- contact (실측: 전체 폭 어두운 패널 + 장식용 세로 디바이더 3개, 중앙 폼) ---------- */
+/* ---------- contact (실측: 전체 폭 어두운 패널 + 장식용 세로 디바이더, 중앙 폼) ----------
+   contact--panel은 불투명 배경이라 사이트 전역 .page-lines를 가리므로, 그 자리를 대신할
+   디바이더를 폼 좌우 바깥쪽(8.3333/16.6667% · 83.3333/91.6667%)에 2개씩 추가해 전역 라인과
+   같은 위치·색으로 이어지게 함(기존 3개는 --brand-line으로 전역 --brand-line-dim보다 밝아
+   튀었던 것도 통일). 폼 안의 입력창 밑줄(.field__input) 등 "컨텐츠" 라인은 그대로 --brand-line 유지. */
 .contact--panel{position:relative;background:var(--brand-bg-raised);overflow:hidden;}
 .contact__dividers{position:absolute;inset:0;pointer-events:none;}
-.contact__dividers span{position:absolute;top:0;bottom:0;width:1px;background:var(--brand-line);}
+.contact__dividers span{position:absolute;top:0;bottom:0;width:1px;background:var(--brand-line-dim);}
 .contact__form{padding-block:var(--space-9);position:relative;}
-.contact__row{margin-bottom:var(--space-6);}
+/* 담당자/이메일 등 우측 컬럼 필드가 중앙(50%) 디바이더 라인에 gap:0으로 바로 붙어 있던 것을
+   ~50px(가장 가까운 토큰 --space-7=48px) 띄움 */
+.contact__row{margin-bottom:var(--space-6);gap:var(--space-7);}
 .field{display:flex;flex-direction:column;gap:var(--space-2);}
 .field--full{margin-bottom:var(--space-8);}
 .field__label{font-size:var(--fs-body-1);color:var(--brand-text-subtle);}
