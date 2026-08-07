@@ -40,50 +40,44 @@
     track.addEventListener('pointerleave', endDrag);
   });
 
-  // ---------- History: pinned reveal via a PASSIVE scroll listener ----------
-  // .history-pin__spacer is a fixed-height (220vh, plain CSS) box; while it
-  // spans the viewport, .history-pin__sticky (position:sticky) holds the
-  // track on screen. This listener only ever READS scroll position
-  // (window 'scroll', passive:true) and WRITES a translateX transform to
-  // the track — it never calls preventDefault and never touches scrollLeft,
-  // so unlike the earlier wheel-hijack version it cannot block or trap page
-  // scrolling under any circumstance. Skipped below 1025px, where CSS falls
-  // back to a plain overflow-x strip (see the matching @media block).
-  const historySection = document.querySelector('.history');
+  // ---------- History: pinned reveal, one card per wheel notch ----------
+  // .history-pin__spacer holds .history-pin__sticky (position:sticky) on
+  // screen while the track pages horizontally via native CSS scroll-snap.
+  // Each wheel tick advances/retreats exactly one card via scrollTo() and
+  // preventDefault()s only while another card transition is possible; at
+  // the first/last card the event is left alone so the page scrolls on
+  // normally — this can never trap scrolling like the earlier wheel-hijack
+  // version did. Skipped below 1025px, where CSS falls back to a plain
+  // swipeable overflow-x strip (see the matching @media block).
   const historySpacer = document.querySelector('.history-pin__spacer');
   const historyTrack = document.querySelector('[data-pin-track]');
-  if (historySection && historySpacer && historyTrack && window.matchMedia('(min-width: 1025px)').matches) {
+  if (historySpacer && historyTrack && window.matchMedia('(min-width: 1025px)').matches) {
     const years = [...historyTrack.querySelectorAll('.history__year')];
-    const trackDistance = Math.max(0, historyTrack.scrollWidth - historyTrack.clientWidth);
+    let index = 0;
+    let locked = false;
 
-    const markActive = () => {
-      const pad = parseFloat(getComputedStyle(historyTrack).paddingInlineStart) || 0;
-      const trackLeft = historyTrack.getBoundingClientRect().left + pad;
-      let closest = years[0];
-      let closestDist = Infinity;
-      years.forEach((year) => {
-        const dist = Math.abs(year.getBoundingClientRect().left - trackLeft);
-        if (dist < closestDist) { closestDist = dist; closest = year; }
-      });
-      years.forEach((y) => y.classList.toggle('is-active', y === closest));
-    };
+    const markActive = () => years.forEach((y, i) => y.classList.toggle('is-active', i === index));
 
-    let ticking = false;
-    const apply = () => {
-      ticking = false;
-      if (trackDistance <= 0) return;
-      const rect = historySpacer.getBoundingClientRect();
-      const total = rect.height - window.innerHeight;
-      const scrolled = Math.min(Math.max(-rect.top, 0), total);
-      const progress = total > 0 ? scrolled / total : 0;
-      historyTrack.style.transform = `translateX(${-progress * trackDistance}px)`;
+    const goTo = (next) => {
+      index = Math.max(0, Math.min(years.length - 1, next));
+      historyTrack.scrollTo({ left: years[index].offsetLeft, behavior: 'smooth' });
       markActive();
+      locked = true;
+      window.clearTimeout(goTo._t);
+      goTo._t = window.setTimeout(() => { locked = false; }, 550);
     };
 
-    window.addEventListener('scroll', () => {
-      if (!ticking) { ticking = true; requestAnimationFrame(apply); }
-    }, { passive: true });
+    historySpacer.addEventListener('wheel', (e) => {
+      if (locked) { e.preventDefault(); return; }
+      if (e.deltaY > 0 && index < years.length - 1) {
+        e.preventDefault();
+        goTo(index + 1);
+      } else if (e.deltaY < 0 && index > 0) {
+        e.preventDefault();
+        goTo(index - 1);
+      }
+    }, { passive: false });
 
-    apply();
+    markActive();
   }
 })();

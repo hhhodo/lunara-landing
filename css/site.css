@@ -204,13 +204,12 @@ main{position:relative;z-index:1;}
 /* pinned reveal: spacer height is a plain fixed CSS value (not JS-computed
    — that ambiguity is what silently produced 0 height/invisibility in an
    earlier attempt), position:sticky holds .history-pin__sticky on screen
-   for that scroll distance. Track itself is no longer a native scroll
-   container (no overflow-x/.h-scroll/scroll-snap) — its horizontal
-   position now comes entirely from the transform js/main.js applies based
-   on scroll progress (a passive scroll listener that only ever reads
-   position and sets a transform — it never calls preventDefault, so unlike
-   the earlier wheel-hijack version, it cannot block page scroll). */
-.history-pin__spacer{position:relative;height:220vh;}
+   while the track's own native scroll-snap does the horizontal paging.
+   js/main.js turns wheel notches into one-card-at-a-time scrollTo() calls on
+   the track and only preventDefault()s while a card transition is still
+   possible — at the first/last card it lets the event through so the page
+   scroll is never trapped (unlike the earlier wheel-hijack version). */
+.history-pin__spacer{position:relative;height:150vh;}
 .history-pin__sticky{
   position:sticky;
   top:0;
@@ -220,12 +219,17 @@ main{position:relative;z-index:1;}
   overflow:hidden;
 }
 .history__years{
+  display:flex;
   width:100%;
   gap:0;
   padding-inline:calc(100% / 12) 0;
   padding-block:var(--space-7) var(--space-2);
-  will-change:transform;
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
 }
+.history__years::-webkit-scrollbar{display:none;}
 /* 4 real page columns, expressed as % of the track's own content box (not
    vw — see the .card--work comment above for why vw drifts off the grid).
    Padding-inline here is LEFT ONLY (calc(100%/12) 0), so content box is
@@ -236,6 +240,8 @@ main{position:relative;z-index:1;}
   padding-left:var(--space-6);
   padding-right:var(--space-6);
   transition:border-color .25s ease;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
 }
 .history__year.is-active{border-left-color:var(--brand-line-bright);}
 .history__year-num{font-size:var(--fs-display-sm);font-weight:var(--fw-base);margin-bottom:var(--space-6);}
@@ -348,5 +354,5 @@ select.field__input{appearance:none;}
      the years as a normal overflow-x scroll strip so touch can pan it directly */
   .history-pin__spacer{height:auto;}
   .history-pin__sticky{position:static;height:auto;}
-  .history__years{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .history__years{-webkit-overflow-scrolling:touch;}
 }
