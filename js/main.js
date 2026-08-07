@@ -48,6 +48,18 @@
   // transition is possible; at the first/last card the event is left alone
   // so the page scrolls on normally — this can never trap scrolling like
   // the earlier wheel-hijack version did.
+  // The listener is on `window`, gated by the section's own
+  // getBoundingClientRect() (top<=0 && bottom>=viewport height) rather than
+  // attached to the section element and relying on hover — an
+  // element-attached listener only fires where the cursor happens to be,
+  // and while the section is entering/leaving (its top or bottom edge still
+  // mid-screen) that region covers just PART of the viewport, so whether
+  // snap engaged ended up depending on mouse position: sometimes the cursor
+  // sat over the neighboring section and wheel just scrolled the page raw,
+  // sometimes it sat over History before the section had even fully arrived
+  // and a card would advance before the section was centered. Gating by
+  // scroll position instead makes it fire consistently regardless of where
+  // the mouse is, and only once the section actually fills the screen.
   // While a transition is in flight ("busy"), further wheel ticks are
   // swallowed so one trackpad gesture (which fires many small wheel events)
   // can't blow through several cards at once — busy clears on the track's
@@ -79,7 +91,13 @@
       busyTimer = window.setTimeout(clearBusy, 700);
     };
 
-    historySection.addEventListener('wheel', (e) => {
+    const fillsViewport = () => {
+      const rect = historySection.getBoundingClientRect();
+      return rect.top <= 0.5 && rect.bottom >= window.innerHeight - 0.5;
+    };
+
+    window.addEventListener('wheel', (e) => {
+      if (!fillsViewport()) return;
       if (busy) { e.preventDefault(); return; }
       if (e.deltaY > 0 && index < years.length - 1) {
         e.preventDefault();
