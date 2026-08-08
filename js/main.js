@@ -122,6 +122,20 @@
 
     window.addEventListener('wheel', (e) => {
       if (!nearlyFills()) return;
+
+      // At the last card and still scrolling down (or first card, scrolling
+      // up), the intent is to LEAVE the section — the re-correct-every-event
+      // fix above (needed for the "lands cut off" bug) otherwise fights
+      // that: as soon as the page moves off rect.top===0 to continue past,
+      // the very next wheel event sees a nonzero rect.top and snaps it right
+      // back, so scrolling could never actually progress past the last
+      // card. Skip correction/preventDefault entirely for that case (once
+      // any in-flight card transition has finished — `!busy` — so we don't
+      // release mid-animation) and let the page scroll on freely.
+      const atLastGoingDown = e.deltaY > 0 && index >= years.length - 1;
+      const atFirstGoingUp = e.deltaY < 0 && index <= 0;
+      if ((atLastGoingDown || atFirstGoingUp) && !busy) return;
+
       const rect = historySection.getBoundingClientRect();
       if (Math.abs(rect.top) > 0.5) {
         e.preventDefault();
