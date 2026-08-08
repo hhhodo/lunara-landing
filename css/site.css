@@ -39,6 +39,11 @@ body{background:var(--brand-bg);color:var(--text-default-inverse);}
   display:flex;
   overflow-x:auto;
   overscroll-behavior-x:contain;
+  /* tells the browser this element only ever pans horizontally itself, so
+     a touch swipe with any vertical component is left alone to scroll the
+     page normally instead of the browser trying (and sometimes fumbling)
+     to decide between the two — this is what "이상한 스크롤" on mobile was */
+  touch-action:pan-x;
   cursor:grab;
   scrollbar-width:none;
 }
@@ -229,8 +234,13 @@ main{position:relative;z-index:1;}
   gap:0;
   overflow-x:auto;
   overflow-y:hidden;
+  overscroll-behavior-x:contain;
   scroll-snap-type:x mandatory;
   scrollbar-width:none;
+  /* same fix as .h-scroll above — without this, a vertical-ish swipe that
+     starts over this horizontal scroll-snap strip can get captured by it
+     instead of scrolling the page, which is what felt "이상한" on mobile */
+  touch-action:pan-x;
 }
 .history__years::-webkit-scrollbar{display:none;}
 /* trailing spacer so the last card can actually reach scroll-snap-align:start
