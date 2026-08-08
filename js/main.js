@@ -103,7 +103,17 @@
     // caught the position is snapped precisely to rect.top===0 so the
     // section still ends up exactly filling the screen regardless of
     // where inside the band it was caught.
-    let engaged = false;
+    // A strong/fast scroll (trackpad fling, fast wheel) doesn't just jump
+    // straight to a clean rect.top===0 — browsers apply their own momentum
+    // physics on top of the discrete wheel events JS receives, so the page
+    // can keep drifting a few more px per frame even after a single
+    // corrective scrollBy() has already run once. Only correcting on the
+    // FIRST qualifying event (the old `if (!engaged)` guard) let that
+    // residual drift stand, which is what showed up as the section landing
+    // slightly cut off / snapped at an odd offset instead of exactly
+    // filling the screen. Now every qualifying event re-corrects, and
+    // preventDefault() fires on every one of them too (not just once) so
+    // native momentum can't keep nudging the page in between corrections.
     const nearlyFills = () => {
       const rect = historySection.getBoundingClientRect();
       const buffer = window.innerHeight * 0.35;
@@ -111,11 +121,12 @@
     };
 
     window.addEventListener('wheel', (e) => {
-      if (!nearlyFills()) { engaged = false; return; }
-      if (!engaged) {
-        engaged = true;
-        const rect = historySection.getBoundingClientRect();
-        if (Math.abs(rect.top) > 0.5) window.scrollBy(0, rect.top);
+      if (!nearlyFills()) return;
+      const rect = historySection.getBoundingClientRect();
+      if (Math.abs(rect.top) > 0.5) {
+        e.preventDefault();
+        window.scrollBy(0, rect.top);
+        return;
       }
       if (busy) { e.preventDefault(); return; }
       if (e.deltaY > 0 && index < years.length - 1) {
